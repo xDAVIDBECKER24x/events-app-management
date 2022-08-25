@@ -22,37 +22,7 @@ class StorageService{
   }
 
   Future getFireStorageFiles(String category) async {
-    List<Map<String, dynamic>> files = [];
-    final ListResult result = await storage.ref('test/${user}/${category}').list();
-    final List<Reference> allFiles = result.items;
 
-    await Future.forEach<Reference>(allFiles, (file) async {
-      final String fileUrl = await file.getDownloadURL();
-      final FullMetadata fileMeta = await file.getMetadata();
-      files.add({
-        "url": fileUrl,
-        "path": file.fullPath,
-        "uploaded_by": fileMeta.customMetadata?['uploaded_by'] ?? 'Nobody',
-        "description":
-        fileMeta.customMetadata?['description'] ?? 'No description'
-      });
-    });
-
-    return files;
-
-    // List<String> urls = [];
-    // late String url;
-    // try{
-    //    ListResult results = await storage.ref('test/${user}/${category}').listAll();
-    //    // print(results);
-    //    //  results.items.forEach((elements) async {
-    //    //    url = await getFireStorageFileByFullPath(elements.fullPath);
-    //    //    urls.add(url);
-    //    //  });
-    //   return results;
-    // }on FirebaseException catch (e){
-    //     print(e);
-    // }
   }
 
   Future getFireStorageFileByFullPath(String path) async {

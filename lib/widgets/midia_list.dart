@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:transparent_image/transparent_image.dart';
 class MediaList extends StatelessWidget {
   final List<Map<String, dynamic>> snapshot;
 
@@ -23,12 +23,14 @@ class MediaList extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius:BorderRadius.circular(30),
                     child: Card(
-                      elevation: 10,
+                      elevation: 5,
                       child: Container(
-                        child: Image.network(
-                          
-                          image['url'],
-                          height: 250,
+                        child: FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          image:image['url'],
+                          fit: BoxFit.fill,
                         ),
                       ),
                     ),

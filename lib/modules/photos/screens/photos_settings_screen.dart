@@ -34,11 +34,11 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
     super.initState();
   }
 
-  Future<List<Map<String, dynamic>>> _loadImages() async {
+  Future<List<Map<String, dynamic>>> _loadImages(String category) async {
     List<Map<String, dynamic>> files = [];
 
     final ListResult result =
-        await FirebaseStorage.instance.ref('test/teste/images').list();
+        await FirebaseStorage.instance.ref('test/teste/${category}').list();
     final List<Reference> allFiles = result.items;
 
     await Future.forEach<Reference>(allFiles, (file) async {
@@ -88,43 +88,49 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
                 child: Container(
                   height: 350,
                   width: MediaQuery.of(context).size.width,
-                  child: FutureBuilder(
-                    future: _loadImages(),
-                    builder: (context,
-                        AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ListTitle(title: 'Fotos',),
-                            MediaList(snapshot: snapshot.data!),
-                          ],
-                        );
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTitle(title: 'Fotos',),
+                      FutureBuilder(
+                        future: _loadImages('images'),
+                        builder: (context,
+                            AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            return MediaList(snapshot: snapshot.data!);
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                // Container(
-                //   margin: EdgeInsets.only(8),
-                //   child: ClipRRect(
-                //     borderRadius: BorderRadius.circular(30),
-                //     child: Container(
-                //       color: Colors.grey.withOpacity(0.5),
-                //       padding: EdgeInsets.all(8),
-                //       child: Text(
-                //         title,
-                //         style: const TextStyle(
-                //           color: Colors.black,
-                //           fontSize: 20.0,
-                //           fontWeight: FontWeight.bold,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 350,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTitle(title: 'Capa',),
+                      FutureBuilder(
+                        future: _loadImages('images'),
+                        builder: (context,
+                            AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            return MediaList(snapshot: snapshot.data!);
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
               SliverToBoxAdapter(
                 child: Column(
