@@ -26,6 +26,7 @@ class MediaList extends StatelessWidget {
                       elevation: 10,
                       child: Container(
                         child: Image.network(
+                          
                           image['url'],
                           height: 250,
                         ),
