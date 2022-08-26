@@ -12,29 +12,65 @@ class EventsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
-      height: 250,
+      margin: EdgeInsets.only(bottom: 46),
+      padding: EdgeInsets.all(12),
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
       child: ListView.builder(
-        scrollDirection: Axis.horizontal,
         itemCount: snapshot.length,
         itemBuilder: (BuildContext context, int index) {
           final Map<String, dynamic> image = snapshot[index];
-          return GestureDetector(
-            // onTap: () => print(contentList[index].name),
-            child: ClipRRect(
-              borderRadius:BorderRadius.circular(30),
-              child: Card(
-                elevation: 5,
-                child: Container(
-                  child: FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    image:image['url'],
-                    fit: BoxFit.fill,
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Container(
+                    child: FadeInImage.memoryNetwork(
+                      width: MediaQuery.of(context).size.width/2.2,
+                      height: MediaQuery.of(context).size.height/6,
+                      placeholder: kTransparentImage,
+                      image:image['url'],
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        '24 Outubro',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Nome foda',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 26.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                          'Lugar',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           );
         },

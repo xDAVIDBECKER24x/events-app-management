@@ -16,7 +16,7 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
     List<Map<String, dynamic>> files = [];
 
     final ListResult result =
-    await FirebaseStorage.instance.ref('test/teste/events').list();
+    await FirebaseStorage.instance.ref('test/teste/images').list();
     final List<Reference> allFiles = result.items;
 
     await Future.forEach<Reference>(allFiles, (file) async {
@@ -66,18 +66,7 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
                   fontSize: 26,
                   color: Colors.black),
             ),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  Icons.info_outline,
-                  color: Colors.grey,
-                  size: 30,
-                ),
-                onPressed: () {
-                  openInfoDialog(context);
-                },
-              )
-            ],
+            actions: []
           )
         ],
         body: CustomScrollView(

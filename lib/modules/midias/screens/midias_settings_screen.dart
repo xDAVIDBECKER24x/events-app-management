@@ -177,13 +177,14 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+
                         children: [
                           ListTitle(title: 'Fotos',),
                           IconButton(
                             icon: Icon(
                               Icons.info_outline,
                               color: Colors.grey,
-                              size: 30,
+                              size: 44,
                             ),
                             onPressed: () {
                               openInfoDialog(context);
@@ -250,8 +251,8 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
       context: context,
       builder: (BuildContext context) {
         return InfoDialogBox(
-            title:"Tela de Midias",
-            infoText : "Nesta tela o administrador , definirá as midias que aparecerão no applicativo"
+            title:"Fotos",
+            infoText : "Nesta sessão ficara , as fotos que aparecerão no applicativo"
         );
       },
     );
