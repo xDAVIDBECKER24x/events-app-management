@@ -28,8 +28,8 @@ class EventsList extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                   child: Container(
                     child: FadeInImage.memoryNetwork(
-                      width: MediaQuery.of(context).size.width/2.2,
-                      height: MediaQuery.of(context).size.height/6,
+                      height: 80,
+                      width: MediaQuery.of(context).size.width/2,
                       placeholder: kTransparentImage,
                       image:image['url'],
                       fit: BoxFit.fill,
@@ -57,7 +57,7 @@ class EventsList extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 10,
                       ),
                       Text(
                           'Lugar',
