@@ -1,8 +1,5 @@
-
-
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:events_app_management/blocs/application_bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class StorageService{

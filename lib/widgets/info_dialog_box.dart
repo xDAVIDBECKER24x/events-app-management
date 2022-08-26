@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 
 class InfoDialogBox extends StatelessWidget {
+  String title;
   String infoText;
-  InfoDialogBox({Key? key, required this.infoText}) : super(key: key);
+  InfoDialogBox({Key? key,required this.title, required this.infoText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Tela de Midias'),
-      content: Text(
-          infoText
-        ),
-      actions: [
-        ElevatedButton(
-          child: Icon(Icons.check),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(30),
+      child: AlertDialog(
+        title: new Text(title),
+        content: new Text(infoText),
+        actions: <Widget>[
+          ElevatedButton(
+            child: new Text("OK"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

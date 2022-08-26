@@ -16,54 +16,54 @@ class Settings{
   static List<Settings> generateSettings(){
     return [
       Settings(
-          bgColor: Colors.grey,
-          iconColor: Colors.blueGrey,
-          btnColor: Colors.grey,
+          bgColor: Colors.white,
+          iconColor: Colors.grey,
+          btnColor: Colors.white,
           icon: Icons.settings,
           title: 'Geral'
       ),
       Settings(
-          bgColor: Colors.grey,
-          iconColor: Colors.blueGrey,
-          btnColor: Colors.grey,
+          bgColor: Colors.white,
+          iconColor: Colors.grey,
+          btnColor: Colors.white,
           icon: Icons.photo,
-          title: 'Fotos'
+          title: 'Midias'
       ),
       Settings(
-          bgColor: Colors.grey,
-          iconColor: Colors.blueGrey,
-          btnColor: Colors.grey,
+          bgColor: Colors.white,
+          iconColor: Colors.grey,
+          btnColor: Colors.white,
           icon: Icons.event_available,
           title: 'Events'
       ),
-      Settings(
-          bgColor: Colors.grey,
-          iconColor: Colors.blueGrey,
-          btnColor: Colors.grey,
-          icon: Icons.qr_code,
-          title: 'Cupons'
-      ),
-      Settings(
-          bgColor: Colors.grey,
-          iconColor: Colors.blueGrey,
-          btnColor: Colors.grey,
-          icon: Icons.star_outline,
-          title: 'Destaques'
-      ),
-      Settings(
-          bgColor: Colors.grey,
-          iconColor: Colors.blueGrey,
-          btnColor: Colors.grey,
-          icon: Icons.menu_book,
-          title: 'Cardápio'
-      ),
-      Settings(
-          bgColor: Colors.grey,
-          iconColor: Colors.blueGrey,
-          btnColor: Colors.grey,
-          icon: Icons.event_available,
-          title: 'Cardápio'
-      ),
+      // Settings(
+      //     bgColor: Colors.grey,
+      //     iconColor: Colors.blueGrey,
+      //     btnColor: Colors.grey,
+      //     icon: Icons.qr_code,
+      //     title: 'Cupons'
+      // ),
+      // Settings(
+      //     bgColor: Colors.grey,
+      //     iconColor: Colors.blueGrey,
+      //     btnColor: Colors.grey,
+      //     icon: Icons.star_outline,
+      //     title: 'Destaques'
+      // ),
+      // Settings(
+      //     bgColor: Colors.grey,
+      //     iconColor: Colors.blueGrey,
+      //     btnColor: Colors.grey,
+      //     icon: Icons.menu_book,
+      //     title: 'Cardápio'
+      // ),
+      // Settings(
+      //     bgColor: Colors.grey,
+      //     iconColor: Colors.blueGrey,
+      //     btnColor: Colors.grey,
+      //     icon: Icons.event_available,
+      //     title: 'Cardápio'
+      // ),
     ];
   }
 

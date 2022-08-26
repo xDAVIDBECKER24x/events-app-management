@@ -40,21 +40,21 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
   Future<List<Map<String, dynamic>>> _loadImages(String category) async {
     List<Map<String, dynamic>> files = [];
 
-    // final ListResult result =
-    //     await FirebaseStorage.instance.ref('test/teste/${category}').list();
-    // final List<Reference> allFiles = result.items;
-    //
-    // await Future.forEach<Reference>(allFiles, (file) async {
-    //   final String fileUrl = await file.getDownloadURL();
-    //   final FullMetadata fileMeta = await file.getMetadata();
-    //   files.add({
-    //     "url": fileUrl,
-    //     "path": file.fullPath,
-    //     "uploaded_by": fileMeta.customMetadata?['uploaded_by'] ?? 'Nobody',
-    //     "description":
-    //         fileMeta.customMetadata?['description'] ?? 'No description'
-    //   });
-    // });
+    final ListResult result =
+        await FirebaseStorage.instance.ref('test/teste/${category}').list();
+    final List<Reference> allFiles = result.items;
+
+    await Future.forEach<Reference>(allFiles, (file) async {
+      final String fileUrl = await file.getDownloadURL();
+      final FullMetadata fileMeta = await file.getMetadata();
+      files.add({
+        "url": fileUrl,
+        "path": file.fullPath,
+        "uploaded_by": fileMeta.customMetadata?['uploaded_by'] ?? 'Nobody',
+        "description":
+            fileMeta.customMetadata?['description'] ?? 'No description'
+      });
+    });
 
     return files;
   }
@@ -62,13 +62,13 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     ApplicationBloc applicationBloc = ApplicationBloc();
-    return Center(
-      child: Scaffold(
+    return Scaffold(
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
-              floating: true,
-              snap: true,
+              pinned: true,
+              snap: false,
+              floating: false,
               centerTitle: true,
               elevation: 0,
               backgroundColor: Colors.white,
@@ -90,12 +90,12 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
               actions: [
                 IconButton(
                   icon: Icon(
-                    Icons.info_outline,
+                    Icons.add,
                     color: Colors.grey,
                     size: 30,
                   ),
                   onPressed: () {
-                    openInfoDialog;
+                    //openInfoDialog(context);
                   },
                 )
               ],
@@ -105,8 +105,7 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
             slivers: [
               SliverToBoxAdapter(
                 child: Container(
-
-                  padding: EdgeInsets.all(20), //padding of outer Container
+                  padding: EdgeInsets.all(16), //padding of outer Container
                   child: DottedBorder(
                     color: Colors.grey,//color of dotted/dash line
                     strokeWidth: 2, //thickness of dash/dots
@@ -119,14 +118,14 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
                           
                           file != null
                               ? Container(
-                            padding: EdgeInsets.all(30),
+                            padding: EdgeInsets.all(16),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.file(file!),
                             ),
                           )
                               : Padding(
-                              padding: EdgeInsets.all(26),
+                              padding: EdgeInsets.all(16),
                               child : Text('Selecione Imagem')
                           ),
                           Container(
@@ -177,7 +176,21 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ListTitle(title: 'Fotos',),
+                      Row(
+                        children: [
+                          ListTitle(title: 'Fotos',),
+                          IconButton(
+                            icon: Icon(
+                              Icons.info_outline,
+                              color: Colors.grey,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              openInfoDialog(context);
+                            },
+                          )
+                        ],
+                      ),
                       FutureBuilder(
                         future: _loadImages('images'),
                         builder: (context,
@@ -194,7 +207,7 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: Divider(
                   height: 5,
                   thickness: 1,
@@ -229,7 +242,6 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 
@@ -237,20 +249,12 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Alert!!"),
-          content: new Text("You are awesome!"),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        return InfoDialogBox(
+            title:"Tela de Midias",
+            infoText : "Nesta tela o administrador , definirá as midias que aparecerão no applicativo"
         );
       },
     );
-    // return InfoDialogBox( info : "Nesta tela o administrador , definirá as midias que aparecerão no applicativo");
+
   }
 }

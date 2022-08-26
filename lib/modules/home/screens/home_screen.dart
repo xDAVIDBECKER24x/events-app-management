@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding:  EdgeInsets.all(15),
               child: Text(
-                'Manage',
+                'Gerenciar',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold
