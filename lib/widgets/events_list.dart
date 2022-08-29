@@ -20,57 +20,72 @@ class EventsList extends StatelessWidget {
         itemCount: snapshot.length,
         itemBuilder: (BuildContext context, int index) {
           final Map<String, dynamic> image = snapshot[index];
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Container(
-                    child: FadeInImage.memoryNetwork(
-                      height: 80,
-                      width: MediaQuery.of(context).size.width/2,
-                      placeholder: kTransparentImage,
-                      image:image['url'],
-                      fit: BoxFit.fill,
+          return Card(
+            elevation: 2,
+            child: Container(
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Container(
+                      child: FadeInImage.memoryNetwork(
+                        height: 80,
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        placeholder: kTransparentImage,
+                        image: image['url'],
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        '24 Outubro',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
+                  Container(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: 80,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          maxLines: 1,
+                          '24 Outubro',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Nome foda',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 26.0,
-                          fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            maxLines: 2,
+                            'Nome fodaaa aaaaaaaa aaaa  aaaa',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                          'Lugar',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                    ],
+                        Expanded(
+                          child: Text(
+                            maxLines: 1,
+                            'Lugaraaaaaaaaaaaaaaa',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              ],
+                ],
+              ),
             ),
           );
         },

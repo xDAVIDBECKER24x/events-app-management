@@ -180,16 +180,16 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
 
                         children: [
                           ListTitle(title: 'Fotos',),
-                          IconButton(
-                            icon: Icon(
-                              Icons.info_outline,
-                              color: Colors.grey,
-                              size: 44,
-                            ),
-                            onPressed: () {
-                              openInfoDialog(context);
-                            },
-                          )
+                          // IconButton(
+                          //   icon: Icon(
+                          //     Icons.info_outline,
+                          //     color: Colors.grey,
+                          //     size: 44,
+                          //   ),
+                          //   onPressed: () {
+                          //     openInfoDialog(context);
+                          //   },
+                          // )
                         ],
                       ),
                       FutureBuilder(

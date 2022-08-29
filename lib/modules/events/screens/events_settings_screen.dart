@@ -72,9 +72,6 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
         body: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
-              child: Container(   ),
-            ),
-            SliverToBoxAdapter(
               child: FutureBuilder(
                 future: _loadEvents(),
                 builder: (context,

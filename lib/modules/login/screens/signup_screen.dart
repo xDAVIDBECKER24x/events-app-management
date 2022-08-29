@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 
 import '../../../components/background_images.dart';
 import '../../../responsive.dart';
-import '../components/login_image.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
 
   final _loginBloc = LoginBloc();
 
@@ -71,7 +70,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                LoginImage(),
+                                InputField(
+                                  icon: Icons.email,
+                                  hint: "Email",
+                                  obscure: false,
+                                  stream: _loginBloc.outEmail,
+                                  onChanged: _loginBloc.changeEmail,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
                                 InputField(
                                   icon: Icons.person_outline,
                                   hint: "Usuário",
@@ -80,11 +88,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onChanged: _loginBloc.changeEmail,
                                 ),
                                 SizedBox(
-                                  height: 16,
+                                  height: 20,
+                                ),
+                                InputField(
+                                  icon: Icons.location_city,
+                                  hint: "CNPJ",
+                                  obscure: true,
+                                  stream: _loginBloc.outPassword,
+                                  onChanged: _loginBloc.changePassword,
+                                ),
+                                SizedBox(
+                                  height: 20,
                                 ),
                                 InputField(
                                   icon: Icons.lock_outline,
                                   hint: "Senha",
+                                  obscure: true,
+                                  stream: _loginBloc.outPassword,
+                                  onChanged: _loginBloc.changePassword,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                InputField(
+                                  icon: Icons.lock_outline,
+                                  hint: "Confirmar Senha",
                                   obscure: true,
                                   stream: _loginBloc.outPassword,
                                   onChanged: _loginBloc.changePassword,
@@ -98,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         onPressed:
                                         snapshot.hasData ? _loginBloc.submit : null,
                                         child: const Text(
-                                          "Login",
+                                          "Criar Conta",
                                         ),
                                         style: ElevatedButton.styleFrom(
                                             primary: Colors.amberAccent,
@@ -127,9 +155,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           desktop: Row(
             children: [
-              const Expanded(
-                child: LoginImage(),
-              ),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

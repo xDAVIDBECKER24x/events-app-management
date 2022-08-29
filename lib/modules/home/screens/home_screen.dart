@@ -13,30 +13,59 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+
+
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      body  : Container(
-        child: Column(
-          children: [
-            Padding(
-              padding:  EdgeInsets.all(15),
-              child: Text(
-                'Gerenciar',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            ),
-            SettingsTile(),
-          ]
+    return WillPopScope(
+      onWillPop: onWillPop(context),
+      child: Scaffold(
+        appBar: _buildAppBar(context),
+        body  : Container(
+          color: Colors.white70,
+          child: Column(
+            children: [
+              // Padding(
+              //   padding:  EdgeInsets.all(15),
+              //   child: Text(
+              //     'Gerenciar',
+              //     style: TextStyle(
+              //       fontSize: 22,
+              //       fontWeight: FontWeight.bold
+              //     ),
+              //   ),
+              // ),
+              SettingsTile(),
+            ]
+          ),
         ),
       ),
     );
   }
 }
+
+Future<bool> onWillPop(context) async {
+  return (await showDialog(
+    context: context,
+    builder: (context) => new AlertDialog(
+      title: new Text('Deslogar ?'),
+      content: new Text('Vc quer sair da conta?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: new Text('Não'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: new Text('Sair'),
+        ),
+      ],
+    ),
+  )) ?? false;
+}
+
 
 AppBar _buildAppBar(context){
   return AppBar(
@@ -95,7 +124,7 @@ AppBar _buildAppBar(context){
           },
           child: Icon(
             Icons.exit_to_app,
-            color: Colors.black,
+            color: Colors.grey,
             size: 34,
           ),
         ),

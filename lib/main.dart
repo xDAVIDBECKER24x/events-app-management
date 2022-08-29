@@ -1,4 +1,5 @@
 import 'package:events_app_management/modules/home/screens/home_screen.dart';
+import 'package:events_app_management/modules/welcome/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Admin Plataform',
-      home:  const HomeScreen(),
+      home:  const WelcomeScreen(),
       theme: ThemeData(
         primaryColor: Colors.grey,
         fontFamily: 'Georgia',

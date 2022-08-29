@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+
 class InputField extends StatelessWidget {
   final IconData icon;
   final String hint;
   final bool obscure;
   final Stream<String> stream;
   final Function(String) onChanged;
+
 
   const InputField(
       {Key? key,
@@ -18,28 +20,37 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<String>(
-        stream: stream,
-        builder: (context, snapshot) {
-          return TextField(
-            onChanged: onChanged,
-            decoration: InputDecoration(
-              errorText: snapshot.hasError ? '$snapshot.error' : null,
-              contentPadding:
-                  const EdgeInsets.only(left: 5, top: 20, bottom: 20, right: 20),
-              icon: Icon(
-                icon,
-                color: Colors.grey,
+    bool _obscureText = true;
+    obscure? _obscureText = true : _obscureText = false;
+      return StreamBuilder<String>(
+          stream: stream,
+          builder: (context, snapshot) {
+            return TextField(
+             style: TextStyle(color: Colors.grey),
+             onChanged: onChanged,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30)
+                ),
+                errorText: snapshot.hasError ? '$snapshot.error' : null,
+                contentPadding:
+                const EdgeInsets.only(left: 5, top: 20, bottom: 20, right: 20),
+                prefixIcon: Icon(
+                  icon,
+                  color: Colors.grey,
+                ),
+                hintText: hint,
+                hintStyle: const TextStyle(color: Colors.grey),
+                fillColor: Colors.grey,
+                focusedBorder:OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.amberAccent, width: 2.0),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
               ),
-              hintText: hint,
-              hintStyle: const TextStyle(color: Colors.grey),
-              focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent)),
-            ),
-            style: const TextStyle(color: Colors.blueAccent),
-            obscureText: obscure,
-          );
+              obscureText: obscure,
+            );
 
-        });
+          });
+
   }
 }
