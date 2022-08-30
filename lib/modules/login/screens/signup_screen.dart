@@ -81,19 +81,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         currentStep: currentStep,
                         steps: getSteps(),
                         onStepContinue: () {
-                          final isLastStep =
-                              currentStep == getSteps().length - 1;
-                          if (isLastStep) {}
+                          final isLastStep = currentStep == getSteps().length - 1;
+                          if (isLastStep) {
+                            print('Sign Up New Account');
+
+                          }
                           setState(() {
-                            currentStep += 1;
+                            currentStep = currentStep + 1;
                           });
+
+                          if(currentStep == 1){
+                            print('mudou');
+                            _signUpBloc.signUp();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return loadingDialog;
+                              },
+                            );
+
+                          }
+                          print(currentStep);
                         },
                         onStepCancel: () {
                           currentStep == 0
                               ? null
                               : setState(() {
-                                  currentStep -= 1;
+                                  currentStep = currentStep-1;
                                 });
+                          print(currentStep);
                         },
                         controlsBuilder:
                             (BuildContext context, ControlsDetails controls) {
@@ -107,7 +123,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   builder: (context, snapshot) {
                                     return ElevatedButton(
                                       onPressed: controls.onStepCancel,
-                                      child: const Icon(Icons.arrow_back_sharp),
+                                      child: const Icon(
+                                          Icons.arrow_back_sharp,
+                                          size: 32
+                                      ),
                                       style: ElevatedButton.styleFrom(
                                           elevation: 0,
                                           primary: Colors.grey,
@@ -130,7 +149,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   builder: (context, snapshot) {
                                     return ElevatedButton(
                                       onPressed: controls.onStepContinue,
-                                      child: const Icon(Icons.check),
+                                      child: const Icon(
+                                          Icons.check,
+                                          size: 32
+                                      ),
                                       style: ElevatedButton.styleFrom(
                                           elevation: 0,
                                           primary: Colors.amberAccent,
@@ -175,71 +197,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Dialog loadingDialog = Dialog(
+    backgroundColor: Colors.transparent,
+    child: Container(
+      height: 80.0,
+      width: 80,
+      alignment: FractionalOffset.center,
+      child: CircularProgressIndicator()
+    ),
+  );
+
   List<Step> getSteps() {
     return [
       Step(
         isActive: currentStep >= 0,
-        title: Text('Email'),
-        content: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                InputField(
-                  icon: Icons.email,
-                  hint: "Email",
-                  obscure: false,
-                  stream: _signUpBloc.outEmail,
-                  onChanged: _signUpBloc.changeEmail,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InputField(
-                  icon: Icons.person_outline,
-                  hint: "Usuário",
-                  obscure: false,
-                  stream: _signUpBloc.outEmail,
-                  onChanged: _signUpBloc.changeEmail,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InputField(
-                  icon: Icons.location_city,
-                  hint: "CNPJ",
-                  obscure: true,
-                  stream: _signUpBloc.outPassword,
-                  onChanged: _signUpBloc.changePassword,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InputField(
-                  icon: Icons.lock_outline,
-                  hint: "Senha",
-                  obscure: true,
-                  stream: _signUpBloc.outPassword,
-                  onChanged: _signUpBloc.changePassword,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InputField(
-                  icon: Icons.lock_outline,
-                  hint: "Confirmar Senha",
-                  obscure: true,
-                  stream: _signUpBloc.outPassword,
-                  onChanged: _signUpBloc.changePassword,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      Step(
-        isActive: currentStep >= 1,
         title: Text('Conta'),
         content: SingleChildScrollView(
           child: Padding(
@@ -280,66 +251,133 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
       Step(
-        isActive: currentStep >= 2,
-        title: Text('Dados'),
-        content: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                InputField(
-                  icon: Icons.email,
-                  hint: "Email",
-                  obscure: false,
-                  stream: _signUpBloc.outEmail,
-                  onChanged: _signUpBloc.changeEmail,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InputField(
-                  icon: Icons.person_outline,
-                  hint: "Usuário",
-                  obscure: false,
-                  stream: _signUpBloc.outEmail,
-                  onChanged: _signUpBloc.changeEmail,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InputField(
-                  icon: Icons.location_city,
-                  hint: "CNPJ",
-                  obscure: true,
-                  stream: _signUpBloc.outPassword,
-                  onChanged: _signUpBloc.changePassword,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InputField(
-                  icon: Icons.lock_outline,
-                  hint: "Senha",
-                  obscure: true,
-                  stream: _signUpBloc.outPassword,
-                  onChanged: _signUpBloc.changePassword,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InputField(
-                  icon: Icons.lock_outline,
-                  hint: "Confirmar Senha",
-                  obscure: true,
-                  stream: _signUpBloc.outPassword,
-                  onChanged: _signUpBloc.changePassword,
-                ),
-              ],
-            ),
-          ),
-        ),
+        isActive: currentStep >= 1,
+        title: Text('Email'),
+        content: Container(),
       ),
+      // Step(
+      //   isActive: currentStep >= 1,
+      //   title: Text('Email'),
+      //   content: SingleChildScrollView(
+      //     child: Padding(
+      //       padding: const EdgeInsets.all(16.0),
+      //       child: Column(
+      //         crossAxisAlignment: CrossAxisAlignment.stretch,
+      //         children: [
+      //           InputField(
+      //             icon: Icons.email,
+      //             hint: "Email",
+      //             obscure: false,
+      //             stream: _signUpBloc.outEmail,
+      //             onChanged: _signUpBloc.changeEmail,
+      //           ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      //           InputField(
+      //             icon: Icons.person_outline,
+      //             hint: "Usuário",
+      //             obscure: false,
+      //             stream: _signUpBloc.outEmail,
+      //             onChanged: _signUpBloc.changeEmail,
+      //           ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      //           InputField(
+      //             icon: Icons.location_city,
+      //             hint: "CNPJ",
+      //             obscure: true,
+      //             stream: _signUpBloc.outPassword,
+      //             onChanged: _signUpBloc.changePassword,
+      //           ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      //           InputField(
+      //             icon: Icons.lock_outline,
+      //             hint: "Senha",
+      //             obscure: true,
+      //             stream: _signUpBloc.outPassword,
+      //             onChanged: _signUpBloc.changePassword,
+      //           ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      //           InputField(
+      //             icon: Icons.lock_outline,
+      //             hint: "Confirmar Senha",
+      //             obscure: true,
+      //             stream: _signUpBloc.outPassword,
+      //             onChanged: _signUpBloc.changePassword,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      // Step(
+      //   isActive: currentStep >= 2,
+      //   title: Text('Dados'),
+      //   content: SingldeChildScrollView(
+      //     child: Padding(
+      //       padding: const EdgeInsets.all(16.0),
+      //       child: Column(
+      //         crossAxisAlignment: CrossAxisAlignment.stretch,
+      //         children: [
+      //           InputField(
+      //             icon: Icons.email,
+      //             hint: "Email",
+      //             obscure: false,
+      //             stream: _signUpBloc.outEmail,
+      //             onChanged: _signUpBloc.changeEmail,
+      //           ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      //           InputField(
+      //             icon: Icons.person_outline,
+      //             hint: "Usuário",
+      //             obscure: false,
+      //             stream: _signUpBloc.outEmail,
+      //             onChanged: _signUpBloc.changeEmail,
+      //           ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      //           InputField(
+      //             icon: Icons.location_city,
+      //             hint: "CNPJ",
+      //             obscure: true,
+      //             stream: _signUpBloc.outPassword,
+      //             onChanged: _signUpBloc.changePassword,
+      //           ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      //           InputField(
+      //             icon: Icons.lock_outline,
+      //             hint: "Senha",
+      //             obscure: true,
+      //             stream: _signUpBloc.outPassword,
+      //             onChanged: _signUpBloc.changePassword,
+      //           ),
+      //           SizedBox(
+      //             height: 20,
+      //           ),
+      //           InputField(
+      //             icon: Icons.lock_outline,
+      //             hint: "Confirmar Senha",
+      //             obscure: true,
+      //             stream: _signUpBloc.outPassword,
+      //             onChanged: _signUpBloc.changePassword,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
     ];
   }
+
 }

@@ -14,11 +14,12 @@ class SignupValidators{
 
   final validatePassword = StreamTransformer<String, String>.fromHandlers(
       handleData: (password, sink){
-        if(password.length>=4){
+        if(password.length>=8){
           sink.add(password);
         }else{
-          sink.addError("Insira uma senha de no mínimo 4 caracteres");
+          sink.addError("Insira uma senha de no mínimo 8 caracteres");
         }
       }
   );
+
 }

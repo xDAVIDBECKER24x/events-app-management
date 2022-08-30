@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:events_app_management/core/auth/login_validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../core/auth/signup_validators.dart';
@@ -13,16 +15,19 @@ class SignUpBloc extends BlocBase with SignupValidators{
 
   final _emailController = BehaviorSubject<String>();
   final _passwordController =BehaviorSubject<String>();
+  final _passwordConfirmController =BehaviorSubject<String>();
   final _stateController = BehaviorSubject<SignUpState>();
 
   Stream<String> get outEmail => _emailController.stream.transform(validateEmail);
   Stream<String> get outPassword => _passwordController.stream.transform(validatePassword);
+  Stream<String> get outConfirmPassword => _passwordConfirmController.stream.transform(validatePassword);
   Stream<SignUpState> get outState => _stateController.stream;
 
-  Stream<bool> get outSubmitValid => CombineLatestStream.combine2(outEmail, outPassword,(a,b) => true);
+  Stream<bool> get outSubmitValid => CombineLatestStream.combine2(outEmail, outPassword, (a,b) => true);
 
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
+  Function(String) get changeConfirmPassword => _passwordConfirmController.sink.add;
 
   late StreamSubscription _streamSubscription;
 
@@ -30,7 +35,7 @@ class SignUpBloc extends BlocBase with SignupValidators{
     FirebaseAuth.instance.signOut();
     _streamSubscription = FirebaseAuth.instance.authStateChanges().listen((user) async {
       if(user != null){
-        if(await verifyPrivileges(user)){
+        if(await verifyIfExist(user)){
           _stateController.add(SignUpState.SUCCESS);
         } else {
           FirebaseAuth.instance.signOut();
@@ -42,22 +47,29 @@ class SignUpBloc extends BlocBase with SignupValidators{
     });
   }
 
-  void submit(){
+  Future signUp() async {
+
+
     final email = _emailController.value;
     final password = _passwordController.value;
+    final passwordConfirm = _passwordConfirmController.value;
 
     _stateController.add(SignUpState.LOADING);
 
+    if (password == passwordConfirm){
+      try{
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: email,
+            password: password
+        );
+      } on FirebaseException catch (e){
+        print(e);
+      }
+    }
 
-    FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password
-    ).catchError((e){
-      _stateController.add(SignUpState.FAIL);
-    });
   }
 
-  Future<bool> verifyPrivileges(User user) async {
+  Future<bool> verifyIfExist(User user) async {
     return await FirebaseFirestore.instance.collection("admins").doc(user.uid).get().then((document){
       if(document.exists){
         return true;
@@ -73,6 +85,7 @@ class SignUpBloc extends BlocBase with SignupValidators{
   void dispose() {
     _emailController.close();
     _passwordController.close();
+    _passwordConfirmController.close();
     _stateController.close();
     _streamSubscription.cancel();
   }
