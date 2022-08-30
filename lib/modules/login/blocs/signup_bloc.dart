@@ -7,17 +7,17 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../core/auth/signup_validators.dart';
 
-enum SingupState {IDLE, LOADING, SUCCESS, FAIL}
+enum SignUpState {IDLE, LOADING, SUCCESS, FAIL}
 
-class SingupBloc extends BlocBase with SignupValidators{
+class SignUpBloc extends BlocBase with SignupValidators{
 
   final _emailController = BehaviorSubject<String>();
   final _passwordController =BehaviorSubject<String>();
-  final _stateController = BehaviorSubject<SingupState>();
+  final _stateController = BehaviorSubject<SignUpState>();
 
   Stream<String> get outEmail => _emailController.stream.transform(validateEmail);
   Stream<String> get outPassword => _passwordController.stream.transform(validatePassword);
-  Stream<SingupState> get outState => _stateController.stream;
+  Stream<SignUpState> get outState => _stateController.stream;
 
   Stream<bool> get outSubmitValid => CombineLatestStream.combine2(outEmail, outPassword,(a,b) => true);
 
@@ -26,18 +26,18 @@ class SingupBloc extends BlocBase with SignupValidators{
 
   late StreamSubscription _streamSubscription;
 
-  LoginBloc(){
+  SignUpBloc(){
     FirebaseAuth.instance.signOut();
     _streamSubscription = FirebaseAuth.instance.authStateChanges().listen((user) async {
       if(user != null){
         if(await verifyPrivileges(user)){
-          _stateController.add(SingupState.SUCCESS);
+          _stateController.add(SignUpState.SUCCESS);
         } else {
           FirebaseAuth.instance.signOut();
-          _stateController.add(SingupState.FAIL);
+          _stateController.add(SignUpState.FAIL);
         }
       } else {
-        _stateController.add(SingupState.IDLE);
+        _stateController.add(SignUpState.IDLE);
       }
     });
   }
@@ -46,14 +46,14 @@ class SingupBloc extends BlocBase with SignupValidators{
     final email = _emailController.value;
     final password = _passwordController.value;
 
-    _stateController.add(SingupState.LOADING);
+    _stateController.add(SignUpState.LOADING);
 
 
     FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password
     ).catchError((e){
-      _stateController.add(SingupState.FAIL);
+      _stateController.add(SignUpState.FAIL);
     });
   }
 

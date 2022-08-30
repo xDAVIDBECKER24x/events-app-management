@@ -1,5 +1,7 @@
+import 'package:events_app_management/constants.dart';
 import 'package:events_app_management/modules/home/screens/home_screen.dart';
 import 'package:events_app_management/modules/login/blocs/login_bloc.dart';
+import 'package:events_app_management/modules/login/screens/signup_screen.dart';
 import 'package:events_app_management/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 
@@ -71,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                LoginImage(),
+                                const LoginImage(),
                                 InputField(
                                   icon: Icons.person_outline,
                                   hint: "Usuário",
@@ -79,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   stream: _loginBloc.outEmail,
                                   onChanged: _loginBloc.changeEmail,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 InputField(
@@ -89,21 +91,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                   stream: _loginBloc.outPassword,
                                   onChanged: _loginBloc.changePassword,
                                 ),
-                                Padding(
-                                  padding:  const EdgeInsets.all(20),
-                                  child: StreamBuilder<bool>(
+                                const  SizedBox(
+                                  height: 12,
+                                ),
+                                StreamBuilder<bool>(
                                     stream: _loginBloc.outSubmitValid,
                                     builder: (context, snapshot) {
                                       return ElevatedButton(
                                         onPressed:
                                         snapshot.hasData ? _loginBloc.submit : null,
-                                        child: const Text(
-                                          "Login",
-                                        ),
                                         style: ElevatedButton.styleFrom(
                                             primary: Colors.amberAccent,
-                                            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                                            textStyle: TextStyle(
+                                            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                                            textStyle: const TextStyle(
                                                 fontSize: 30,
                                                 fontWeight: FontWeight.bold
                                             ),
@@ -111,10 +111,44 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 borderRadius: BorderRadius.circular(40)
                                             )
                                         ),
+                                        child: const Text(
+                                          "Login",
+                                        ),
                                       );
                                     },
-                                  ),
+                                ),  const  SizedBox(
+                                  height: 8,
                                 ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const  Text(
+                                      "Não possui conta? ",
+                                      style: TextStyle(
+                                        color: Colors.blueGrey
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return SignUpScreen();
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      child:const  Text(
+                                        'Sign Up',
+                                        style: TextStyle(
+                                            color: Colors.amber,
+                                          fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -122,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                   }
                 }
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
           ),
           desktop: Row(

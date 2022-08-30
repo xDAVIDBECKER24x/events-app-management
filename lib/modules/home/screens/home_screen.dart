@@ -1,6 +1,7 @@
 import 'package:events_app_management/models/settings_model.dart';
 import 'package:events_app_management/modules/login/screens/login_screen.dart';
 import 'package:events_app_management/widgets/settings_tile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,13 +15,46 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
 
-
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) =>  AlertDialog(
+        title:  Text('Deslogar'),
+        content:  Text('Vc quer sair da conta?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              return Navigator.of(context).pop(false);
+            },
+            child: Text(
+              'Não',
+              style:  TextStyle(
+                color: Colors.grey
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: (){
+              FirebaseAuth.instance.signOut();
+              return Navigator.of(context).pop(true);
+            },
+            child:  Text(
+            'Sair',
+            style:  TextStyle(
+              color:  Colors.redAccent
+              ),
+            ),
+          ),
+        ],
+      ),
+    )) ?? false;
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: onWillPop(context),
+      onWillPop: _onWillPop,
       child: Scaffold(
         appBar: _buildAppBar(context),
         body  : Container(
@@ -46,25 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-Future<bool> onWillPop(context) async {
-  return (await showDialog(
-    context: context,
-    builder: (context) => new AlertDialog(
-      title: new Text('Deslogar ?'),
-      content: new Text('Vc quer sair da conta?'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: new Text('Não'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: new Text('Sair'),
-        ),
-      ],
-    ),
-  )) ?? false;
-}
+
 
 
 AppBar _buildAppBar(context){
@@ -117,9 +133,11 @@ AppBar _buildAppBar(context){
             primary: Colors.white
           ),
           onPressed: (){
-            Navigator.push(
+            FirebaseAuth.instance.signOut();
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (Route<dynamic> route) => false,
             );
           },
           child: Icon(

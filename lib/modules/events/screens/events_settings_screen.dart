@@ -45,47 +45,41 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
-            pinned: true,
-            snap: false,
-            floating: false,
-            centerTitle: true,
-            elevation: 0,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.grey,
-                size: 30,
+              pinned: true,
+              snap: false,
+              floating: false,
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.grey,
+                  size: 30,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
               ),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            title: Text(
-              "Eventos",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 26,
-                  color: Colors.black),
-            ),
-            actions: []
+              title: Text(
+                "Eventos",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26,
+                    color: Colors.black),
+              ),
+              actions: []
           )
         ],
-        body: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: FutureBuilder(
-                future: _loadEvents(),
-                builder: (context,
-                    AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return EventsList(snapshot: snapshot.data!);
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-            ),
-          ],
+        body: FutureBuilder(
+          future: _loadEvents(),
+          builder: (context,
+          AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return EventsList(snapshot: snapshot.data!);
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
       ),
     );
