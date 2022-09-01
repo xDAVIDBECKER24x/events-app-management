@@ -12,7 +12,7 @@ class LoginImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: defaultPadding * 2),
+        SizedBox(height: 32),
         Row(
           children: [
             const Spacer(),
@@ -23,7 +23,7 @@ class LoginImage extends StatelessWidget {
             const Spacer(),
           ],
         ),
-        SizedBox(height: defaultPadding * 2),
+        SizedBox(height: 32),
       ],
     );
   }

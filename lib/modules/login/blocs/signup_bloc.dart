@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:events_app_management/models/account_message.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +22,6 @@ class SignUpBloc extends BlocBase with SignupValidators{
   Stream<String> get outEmail => _emailController.stream.transform(validateEmail);
   Stream<String> get outPassword => _passwordController.stream.transform(validatePassword);
   Stream<String> get outConfirmPassword => _passwordConfirmController.stream.transform(validatePassword);
-
 
 
   Stream<bool> get outSubmitValidAccount => CombineLatestStream.combine3(
@@ -50,7 +51,7 @@ class SignUpBloc extends BlocBase with SignupValidators{
     _stateController.add(SignUpState.IDLE);
   }
 
-  Future<String?> signUp() async {
+  Future<AccountMessage> signUp() async {
     _stateController.add(SignUpState.LOADING);
     final email = _emailController.value;
     final password = _passwordController.value;
@@ -62,36 +63,47 @@ class SignUpBloc extends BlocBase with SignupValidators{
 
     if (password != passwordConfirm) {
       _stateController.add(SignUpState.IDLE);
-      return 'Senhas tem que ser iguais';
+      return AccountMessage(code: 1, message :'Senhas tem que ser iguais');
     }
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password
       );
-      return 'Verificar email enviado para : ${email}';
+      sendEmailVerification(email);
+      return AccountMessage(code : 0 ,message :'Verificar email enviado para : ${email}');
     } on FirebaseException catch (error) {
       _stateController.add(SignUpState.IDLE);
-      return error.message!;
+      return AccountMessage(code : 2 ,message :error.message!);
     }
 
   }
 
 
-  Future<bool> checkIfEmailInUse(String email) async {
+  Future sendEmailVerification(String email) async {
+
     try {
-      final list = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-      if (list.isNotEmpty) {
-      return true;
-      } else {
-         return false;
+      final user = FirebaseAuth.instance.currentUser!;
+      await user.sendEmailVerification();
+    } catch (error) {
+      print(error);
+    }
+
+  }
+
+  Future<bool> checkEmailVerified() async {
+
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user!= null && user.emailVerified) {
+        _stateController.add(SignUpState.IDLE);
+        return true;
       }
     } catch (error) {
       print(error);
-      return true;
     }
+    return false;
   }
-
 
   Future<bool> verifyAdmin(User user) async {
     return await FirebaseFirestore.instance.collection("admins").doc(user.uid).get().then((document){

@@ -13,7 +13,7 @@ class WelcomeImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: defaultPadding * 2),
+        SizedBox(height: 32),
         Row(
           children: [
             Spacer(),
@@ -26,7 +26,7 @@ class WelcomeImage extends StatelessWidget {
             Spacer(),
           ],
         ),
-        SizedBox(height: defaultPadding * 2),
+        SizedBox(height: 32),
       ],
     );
   }

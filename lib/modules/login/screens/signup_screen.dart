@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:math';
 
+import 'package:events_app_management/models/account_message.dart';
 import 'package:events_app_management/modules/home/screens/home_screen.dart';
 import 'package:events_app_management/modules/login/blocs/login_bloc.dart';
 import 'package:events_app_management/modules/login/blocs/signup_bloc.dart';
 import 'package:events_app_management/modules/login/screens/login_screen.dart';
 import 'package:events_app_management/modules/welcome/screens/welcome_screen.dart';
 import 'package:events_app_management/widgets/input_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/background_images.dart';
@@ -22,14 +25,28 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _signUpBloc = SignUpBloc();
   int currentStep = 0;
+  bool isEmailVerified = false;
+  Timer? timer;
+  User? user = FirebaseAuth.instance.currentUser;
 
   late String email ='';
   late String password ='';
   late String passwordConfirm ='';
 
+
+
   @override
   void initState() {
     super.initState();
+
+    isEmailVerified ? isEmailVerified = user!.emailVerified : isEmailVerified = false;
+
+    if(!isEmailVerified){
+      timer = Timer.periodic(Duration(seconds: 3), (timer) {
+        checkEmailVerified();
+      });
+      
+    }
 
     _signUpBloc.outState.listen((state) {
       switch (state) {
@@ -98,26 +115,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           });
 
 
-
                           if(currentStep == 1){
                             print('Criar Conta');
-                            String? accountCreatingtCode = await _signUpBloc.signUp();
+                            AccountMessage accountMessage = await _signUpBloc.signUp();
                             print('-------------------');
-                            print(accountCreatingtCode);
-
-                           Widget alert = InfoDialogBox(title:'',infoText: accountCreatingtCode,);
-
-
+                            print(accountMessage.message);
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return alert;
+                                return  InfoDialogBox(title:'',infoText: accountMessage.message,);
                               },
                             );
-
-                            setState(() {
-                              currentStep = 0;
-                            });
+                            if(accountMessage.code != 0){
+                              setState(() {
+                                currentStep = 0;
+                              });
+                            }
 
                           }
 
@@ -247,6 +260,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
 
+  }
+
+  Future checkEmailVerified() async{
+    await user?.reload();
+    setState(() async {
+      isEmailVerified = await _signUpBloc.checkEmailVerified();
+    });
+    if(isEmailVerified) timer?.cancel();
   }
 
   List<Step> getSteps() {
