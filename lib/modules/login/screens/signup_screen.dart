@@ -3,11 +3,14 @@ import 'dart:math';
 import 'package:events_app_management/modules/home/screens/home_screen.dart';
 import 'package:events_app_management/modules/login/blocs/login_bloc.dart';
 import 'package:events_app_management/modules/login/blocs/signup_bloc.dart';
+import 'package:events_app_management/modules/login/screens/login_screen.dart';
+import 'package:events_app_management/modules/welcome/screens/welcome_screen.dart';
 import 'package:events_app_management/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/background_images.dart';
 import '../../../responsive.dart';
+import '../../../widgets/info_dialog_box.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -20,6 +23,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _signUpBloc = SignUpBloc();
   int currentStep = 0;
 
+  late String email ='';
+  late String password ='';
+  late String passwordConfirm ='';
+
   @override
   void initState() {
     super.initState();
@@ -28,14 +35,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
       switch (state) {
         case SignUpState.SUCCESS:
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
+              MaterialPageRoute(builder: (context) => const LoginScreen()));
           break;
         case SignUpState.FAIL:
           showDialog(
               context: context,
               builder: (context) => const AlertDialog(
                     title: Text("Erro"),
-                    content: Text("Você não possui os privilégios necessários"),
+                    content: Text("Erro ao criar conta"),
                   ));
           break;
         case SignUpState.LOADING:
@@ -63,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   case SignUpState.LOADING:
                     return const Center(
                       child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+                        valueColor: AlwaysStoppedAnimation(Colors.amber),
                       ),
                     );
                   case SignUpState.FAIL:
@@ -80,35 +87,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         type: StepperType.horizontal,
                         currentStep: currentStep,
                         steps: getSteps(),
-                        onStepContinue: () {
+                        onStepContinue: () async {
                           final isLastStep = currentStep == getSteps().length - 1;
                           if (isLastStep) {
-                            print('Sign Up New Account');
+                            print('Finalizado');
 
                           }
                           setState(() {
                             currentStep = currentStep + 1;
                           });
 
+
+
                           if(currentStep == 1){
-                            print('mudou');
-                            _signUpBloc.signUp();
+                            print('Criar Conta');
+                            String? accountCreatingtCode = await _signUpBloc.signUp();
+                            print('-------------------');
+                            print(accountCreatingtCode);
+
+                           Widget alert = InfoDialogBox(title:'',infoText: accountCreatingtCode,);
+
+
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return loadingDialog;
+                                return alert;
                               },
                             );
 
+                            setState(() {
+                              currentStep = 0;
+                            });
+
                           }
+
+                          if(currentStep == 2){
+                            print('Finalizar Conta');
+
+                          }
+
                           print(currentStep);
                         },
                         onStepCancel: () {
-                          currentStep == 0
-                              ? null
-                              : setState(() {
-                                  currentStep = currentStep-1;
-                                });
+                          if(currentStep == 0){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                            );
+                          }else{
+                            setState(() {
+                              currentStep = currentStep-1;
+                            });
+                          }
                           print(currentStep);
                         },
                         controlsBuilder:
@@ -119,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(5),
                                 child: StreamBuilder<bool>(
-                                  stream: _signUpBloc.outSubmitValid,
+                                  stream: _signUpBloc.outSubmitValidAccount,
                                   builder: (context, snapshot) {
                                     return ElevatedButton(
                                       onPressed: controls.onStepCancel,
@@ -145,10 +175,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(5),
                                 child: StreamBuilder<bool>(
-                                  stream: _signUpBloc.outSubmitValid,
+                                  stream:   _signUpBloc.outSubmitValidAccount,
                                   builder: (context, snapshot) {
                                     return ElevatedButton(
-                                      onPressed: controls.onStepContinue,
+                                      onPressed: snapshot.hasData ?  controls.onStepContinue : null,
                                       child: const Icon(
                                           Icons.check,
                                           size: 32
@@ -197,15 +227,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Dialog loadingDialog = Dialog(
-    backgroundColor: Colors.transparent,
-    child: Container(
-      height: 80.0,
-      width: 80,
-      alignment: FractionalOffset.center,
-      child: CircularProgressIndicator()
-    ),
-  );
+  Dialog alertDialog(String text) {
+    return Dialog(
+      backgroundColor: Colors.white70,
+      child: AlertDialog(
+        title: Text(text),
+      ),
+    );
+  }
+
+  Dialog loadingDialog(){
+    return Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+        height: 80.0,
+        width: 80,
+        alignment: FractionalOffset.center,
+        child: CircularProgressIndicator()
+      ),
+    );
+
+  }
 
   List<Step> getSteps() {
     return [
@@ -219,6 +261,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 InputField(
+                  label: 'Email',
                   icon: Icons.email,
                   hint: "Email",
                   obscure: false,
@@ -229,6 +272,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 20,
                 ),
                 InputField(
+                  label: 'Senha',
                   icon: Icons.lock_outline,
                   hint: "Senha",
                   obscure: true,
@@ -239,11 +283,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 20,
                 ),
                 InputField(
+                  label: 'Confirmar Senha',
                   icon: Icons.lock_outline,
                   hint: "Confirmar Senha",
                   obscure: true,
-                  stream: _signUpBloc.outPassword,
-                  onChanged: _signUpBloc.changePassword,
+                  stream: _signUpBloc.outConfirmPassword,
+                  onChanged: _signUpBloc.changeConfirmPassword,
                 ),
               ],
             ),
@@ -252,8 +297,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
       Step(
         isActive: currentStep >= 1,
-        title: Text('Email'),
-        content: Container(),
+        title: Text('Dados'),
+        content: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                InputField(
+                  label: '',
+                  icon: Icons.email,
+                  hint: "Email",
+                  obscure: false,
+                  stream: _signUpBloc.outEmail,
+                  onChanged: _signUpBloc.changeEmail,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                InputField(
+                  label: '',
+                  icon: Icons.lock_outline,
+                  hint: "Senha",
+                  obscure: true,
+                  stream: _signUpBloc.outPassword,
+                  onChanged: _signUpBloc.changePassword,
+
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
       // Step(
       //   isActive: currentStep >= 1,

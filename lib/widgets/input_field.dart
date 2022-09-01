@@ -5,12 +5,14 @@ class InputField extends StatelessWidget {
   final IconData icon;
   final String hint;
   final bool obscure;
+  final String? label;
   final Stream<String> stream;
   final Function(String) onChanged;
 
 
   const InputField(
       {Key? key,
+      required this.label,
       required this.icon,
       required this.hint,
       required this.obscure,
@@ -20,8 +22,7 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool _obscureText = true;
-    obscure? _obscureText = true : _obscureText = false;
+
       return StreamBuilder<String>(
           stream: stream,
           builder: (context, snapshot) {
@@ -32,13 +33,14 @@ class InputField extends StatelessWidget {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30)
                 ),
-                errorText: snapshot.hasError ? '$snapshot.error' : null,
+                errorText: snapshot.hasError ? '${snapshot.error}' : null,
                 contentPadding:
                 const EdgeInsets.only(left: 5, top: 20, bottom: 20, right: 20),
                 prefixIcon: Icon(
                   icon,
                   color: Colors.grey,
                 ),
+                labelText: label,
                 hintText: hint,
                 hintStyle: const TextStyle(color: Colors.grey),
                 fillColor: Colors.grey,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class InfoDialogBox extends StatelessWidget {
-  String title;
-  String infoText;
+  String? title;
+  String? infoText;
   InfoDialogBox({Key? key,required this.title, required this.infoText}) : super(key: key);
 
   @override
@@ -10,15 +10,33 @@ class InfoDialogBox extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(30),
       child: AlertDialog(
-        title: new Text(title),
-        content: new Text(infoText),
+        title: Text(title!),
+        content:  Text(
+            infoText!,
+         style: TextStyle(
+           fontSize: 24,
+           fontWeight: FontWeight.bold,
+         ),
+        ),
         actions: <Widget>[
-          ElevatedButton(
-            child: new Text("OK"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+            ElevatedButton(
+              child: Icon(Icons.check),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                primary: Colors.amberAccent,
+                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                textStyle: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40)
+                )
+              ),
+            ),
         ],
       ),
     );

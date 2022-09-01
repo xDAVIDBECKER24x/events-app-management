@@ -1,4 +1,3 @@
-import 'package:events_app_management/constants.dart';
 import 'package:events_app_management/modules/home/screens/home_screen.dart';
 import 'package:events_app_management/modules/login/blocs/login_bloc.dart';
 import 'package:events_app_management/modules/login/screens/signup_screen.dart';
@@ -62,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   switch(snapshot.data) {
                     case LoginState.LOADING:
                       return const Center(child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Colors.blueAccent),),);
+                        valueColor: AlwaysStoppedAnimation(Colors.amberAccent),),);
                     case LoginState.FAIL:
                     case LoginState.SUCCESS:
                     case LoginState.IDLE:
@@ -75,6 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 const LoginImage(),
                                 InputField(
+                                  label: '',
                                   icon: Icons.person_outline,
                                   hint: "Usuário",
                                   obscure: false,
@@ -85,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   height: 16,
                                 ),
                                 InputField(
+                                  label: '',
                                   icon: Icons.lock_outline,
                                   hint: "Senha",
                                   obscure: true,
@@ -95,27 +96,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                   height: 12,
                                 ),
                                 StreamBuilder<bool>(
-                                    stream: _loginBloc.outSubmitValid,
-                                    builder: (context, snapshot) {
-                                      return ElevatedButton(
-                                        onPressed:
-                                        snapshot.hasData ? _loginBloc.submit : null,
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.amberAccent,
-                                            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                                            textStyle: const TextStyle(
-                                                fontSize: 30,
-                                                fontWeight: FontWeight.bold
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(40)
-                                            )
-                                        ),
-                                        child: const Text(
-                                          "Login",
-                                        ),
-                                      );
-                                    },
+                                  stream: _loginBloc.outSubmitValid,
+                                  builder: (context, snapshot) {
+                                    return ElevatedButton(
+                                      onPressed:
+                                      snapshot.hasData ? _loginBloc.submit : null,
+                                      style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          primary: Colors.amberAccent,
+                                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                                          textStyle: const TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(40)
+                                          )
+                                      ),
+                                      child: const Text(
+                                        "Login",
+                                      ),
+                                    );
+                                  },
                                 ),
                                 const  SizedBox(
                                   height: 8,
@@ -126,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     const  Text(
                                       "Não possui conta? ",
                                       style: TextStyle(
-                                        color: Colors.blueGrey
+                                          color: Colors.blueGrey
                                       ),
                                     ),
                                     GestureDetector(
@@ -144,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         'Sign Up',
                                         style: TextStyle(
                                             color: Colors.amber,
-                                          fontWeight: FontWeight.bold
+                                            fontWeight: FontWeight.bold
                                         ),
                                       ),
                                     )
@@ -157,7 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                   }
                 }
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Colors.amberAccent),),);
               }
           ),
           desktop: Row(
