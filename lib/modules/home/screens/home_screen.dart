@@ -1,7 +1,6 @@
-import 'package:events_app_management/models/settings_model.dart';
-import 'package:events_app_management/modules/login/screens/login_screen.dart';
+
+import 'package:events_app_management/widgets/logout_dialog.dart';
 import 'package:events_app_management/widgets/settings_tile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,35 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
       context: context,
-      builder: (context) =>  AlertDialog(
-        title:  Text('Deslogar'),
-        content:  Text('Vc quer sair da conta?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              return Navigator.of(context).pop(false);
-            },
-            child: Text(
-              'Não',
-              style:  TextStyle(
-                color: Colors.grey
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: (){
-              FirebaseAuth.instance.signOut();
-              return Navigator.of(context).pop(true);
-            },
-            child:  Text(
-            'Sair',
-            style:  TextStyle(
-              color:  Colors.redAccent
-              ),
-            ),
-          ),
-        ],
-      ),
+      builder: (context) => LogoutDialog(context),
     )) ?? false;
   }
 
@@ -61,16 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.white70,
           child: Column(
             children: [
-              // Padding(
-              //   padding:  EdgeInsets.all(15),
-              //   child: Text(
-              //     'Gerenciar',
-              //     style: TextStyle(
-              //       fontSize: 22,
-              //       fontWeight: FontWeight.bold
-              //     ),
-              //   ),
-              // ),
               SettingsTile(),
             ]
           ),
@@ -79,8 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
 
 
 AppBar _buildAppBar(context){
@@ -133,12 +92,7 @@ AppBar _buildAppBar(context){
             primary: Colors.white
           ),
           onPressed: (){
-            FirebaseAuth.instance.signOut();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (Route<dynamic> route) => false,
-            );
+            showDialog(context: context,  builder: (context) => LogoutDialog(context),);
           },
           child: Icon(
             Icons.exit_to_app,

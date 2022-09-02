@@ -23,7 +23,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.grey,
         fontFamily: 'Georgia',
-      ),
+        colorScheme: Theme.of(context)
+        .colorScheme
+        .copyWith(primary: Colors.amber)
+
+        ),
     );
   }
 }

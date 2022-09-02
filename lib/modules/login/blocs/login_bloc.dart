@@ -27,6 +27,8 @@ class LoginBloc extends BlocBase with LoginValidators{
   LoginBloc(){
     FirebaseAuth.instance.signOut();
     _streamSubscription = FirebaseAuth.instance.authStateChanges().listen((user) async {
+      print(user?.email);
+
       if(user != null){
         if(await verifyPrivileges(user)){
           _stateController.add(LoginState.SUCCESS);
@@ -40,23 +42,27 @@ class LoginBloc extends BlocBase with LoginValidators{
     });
   }
 
-  void submit(){
-    final email = _emailController.value;
-    final password = _passwordController.value;
+  Future submit() async{
 
     _stateController.add(LoginState.LOADING);
 
+    final email = _emailController.value;
+    final password = _passwordController.value;
 
-    FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password
-    ).catchError((e){
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+    } on FirebaseException catch (error) {
+      print(error.message);
       _stateController.add(LoginState.FAIL);
-    });
+
+    }
   }
 
   Future<bool> verifyPrivileges(User user) async {
-    return await FirebaseFirestore.instance.collection("admins").doc(user.uid).get().then((document){
+    return await FirebaseFirestore.instance.collection("partners").doc(user.uid).get().then((document){
       if(document.exists){
         return true;
       }else{

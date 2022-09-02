@@ -14,7 +14,6 @@ class InfoDialogBox extends StatelessWidget {
         content:  Text(
             infoText!,
          style: TextStyle(
-           fontSize: 24,
            fontWeight: FontWeight.bold,
          ),
         ),

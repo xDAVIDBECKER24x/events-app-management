@@ -47,6 +47,7 @@ dependencies:
   dotted_border: ^2.0.0+2
   qr_flutter: ^4.0.0
   flutter_svg: ^1.1.4
+  flutter_launcher_icons: ^0.10.0
 
 
 dev_dependencies:
@@ -62,6 +63,21 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/pizza.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "path/to/image.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "path/to/image.png"
+    icon_size: 48 # min:48, max:256, default: 48
 
 # The following section is specific to Flutter packages.
 flutter:

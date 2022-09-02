@@ -22,5 +22,15 @@ class SignupValidators{
       }
   );
 
+  final validateNameField = StreamTransformer<String, String>.fromHandlers(
+      handleData: (password, sink){
+        if(password.length>=5){
+          sink.add(password);
+        }else{
+          sink.addError("Mínimo 5 caracteres");
+        }
+      }
+  );
+
 
 }

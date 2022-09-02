@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 const LoginImage(),
                                 InputField(
-                                  label: '',
+                                  label: 'Usuário',
                                   icon: Icons.person_outline,
                                   hint: "Usuário",
                                   obscure: false,
@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   height: 16,
                                 ),
                                 InputField(
-                                  label: '',
+                                  label: 'Senha',
                                   icon: Icons.lock_outline,
                                   hint: "Senha",
                                   obscure: true,
