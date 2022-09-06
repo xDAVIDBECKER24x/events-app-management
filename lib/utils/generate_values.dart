@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:math';
+import 'package:crypto/crypto.dart';
 
-String generateRandomString(int len) {
-  var r = Random();
-  return String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
+String sha1RandomString() {
+  final randomNumber = Random().nextDouble();
+  final randomBytes = utf8.encode(randomNumber.toString());
+  final randomString = sha1.convert(randomBytes).toString();
+  return randomString;
 }

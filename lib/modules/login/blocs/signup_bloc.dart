@@ -108,7 +108,7 @@ class SignUpBloc extends BlocBase with SignupValidators {
     }
   }
 
-  Future<AccountMessage> addInfoSignup() async {
+  Future addInfoSignup() async {
     _stateController.add(SignUpState.LOADING);
     String uid = currentUser.uid;
     String? email = currentUser.email;
@@ -121,27 +121,23 @@ class SignUpBloc extends BlocBase with SignupValidators {
     print(address);
     print(name);
     print(establishment);
-    try{
-      await firestore.collection('partners').add({
-        'uid': uid,
-        'email': email,
-        'address': address,
-        'name': name,
-        'establishment': establishment,
-      })
-          .then((value) {
-        _stateController.add(SignUpState.IDLE);
-        return AccountMessage(
-            code: 0, message: 'Infromações atualizadas');
-      })
-          .catchError((error) {
-        _stateController.add(SignUpState.FAIL);
-        return AccountMessage(code: 2, message: error.message!);
-      });
-    }catch(error){
-      return AccountMessage(code: 2, message: "Erro ao adicionar infos");
-    }
-    return AccountMessage(code: 2, message: "Erro ao adicionar infos");
+
+    await firestore.collection('partners').add({
+      'uid': uid,
+      'email': email,
+      'address': address,
+      'name': name,
+      'establishment': establishment,
+    })
+        .then((value) {
+      _stateController.add(SignUpState.IDLE);
+      return AccountMessage(
+          code: 0, message: 'Infromações atualizadas');
+    })
+        .catchError((error) {
+      _stateController.add(SignUpState.FAIL);
+      return AccountMessage(code: 2, message: error.message!);
+    });
 
   }
 
@@ -181,6 +177,9 @@ class SignUpBloc extends BlocBase with SignupValidators {
     _emailController.close();
     _passwordController.close();
     _passwordConfirmController.close();
+    _nameController.close();
+    _addressController.close();
+    _establishmentNameController.close();
     _stateController.close();
     _streamSubscription.cancel();
   }

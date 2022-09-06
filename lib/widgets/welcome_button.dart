@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class WelcomeButton extends StatelessWidget {
   const WelcomeButton({Key? key, required this.text,required this.color, required this.route, required this.textColor}) : super(key: key);
 
-  final Widget route;
+  final Widget? route;
   final String text;
   final Color color;
   final Color textColor;
@@ -15,13 +15,14 @@ class WelcomeButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
+          route == null ? null :
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) {
-                return route;
+                return route!;
               },
-            ),
+            )
           );
         },
         child: Text(

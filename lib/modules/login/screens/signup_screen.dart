@@ -39,7 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
 
     if (!isEmailVerified && user != null) {
-      timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      timer = Timer.periodic(Duration(seconds: 2), (timer) {
         checkEmailVerified();
       });
     }
@@ -146,13 +146,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
 
                           if (currentStep == 2) {
-                            print('Infos conta');
-                            AccountMessage accountMessage =
                             await _signUpBloc.addInfoSignup();
-                            print('-------------------');
-                            print(accountMessage.message);
                           }
+
                           print(currentStep);
+
                         },
                         onStepCancel: () {
                           if (currentStep == 0) {
@@ -278,8 +276,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         isActive: currentStep >= 0 ,
         title: Text('Conta'),
         content: Container(
-          height: MediaQuery.of(context).size.height -250,
-          alignment: Alignment.center,
+          // height: MediaQuery.of(context).size.height -250,
+          // alignment: Alignment.center,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -326,8 +324,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         isActive: currentStep >= 1,
         title: Text('Dados'),
         content: Container(
-          height: MediaQuery.of(context).size.height -250,
-          alignment: Alignment.center,
+          // height: MediaQuery.of(context).size.height -250,
+          // alignment: Alignment.center,
           child: SingleChildScrollView(
             child: Center(
               child: Padding(

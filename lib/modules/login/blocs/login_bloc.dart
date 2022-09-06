@@ -62,7 +62,7 @@ class LoginBloc extends BlocBase with LoginValidators{
   }
 
   Future<bool> verifyPrivileges(User user) async {
-    return await FirebaseFirestore.instance.collection("partners").doc(user.uid).get().then((document){
+    return await FirebaseFirestore.instance.collection("users").doc(user.uid).get().then((document){
       if(document.exists){
         return true;
       }else{

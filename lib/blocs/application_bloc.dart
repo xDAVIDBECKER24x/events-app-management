@@ -1,30 +1,32 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:events_app_management/models/file_model.dart';
+import 'package:events_app_management/constants.dart';
 import 'package:events_app_management/services/storage_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/cupertino.dart';
 
-class ApplicationBloc {
+
+class ApplicationBloc with ChangeNotifier{
 
   StorageService storageService = StorageService();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List files = [];
+  late AsyncSnapshot<List<Map<String, dynamic>>> events;
 
-  List<String> files = [];
+  ApplicationBloc(){
+  }
+
 
 
   Future getUploadedFiles() async{
-    String category = 'images';
-    String name = 'foo';
-
+    String category = 'Fotos';
     files = await storageService.getFireStorageFiles(category);
     return files;
   }
 
 
-  Future uploadFile(File file) async{
-    String category = 'images';
+  Future uploadFile(File file, String category) async{
     try{
       await storageService.uploadFile(file, category);
     } on FirebaseException catch (e){
@@ -32,6 +34,11 @@ class ApplicationBloc {
     }
   }
 
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
 
 }

@@ -1,5 +1,5 @@
 import 'package:events_app_management/models/settings_model.dart';
-import 'package:events_app_management/modules/events/screens/events_settings_screen.dart';
+import 'package:events_app_management/modules/events/screens/event_settings_screen.dart';
 import 'package:events_app_management/modules/geral/screens/geral_settings_screen.dart';
 import 'package:events_app_management/modules/midias/screens/midias_settings_screen.dart';
 import 'package:flutter/material.dart';
