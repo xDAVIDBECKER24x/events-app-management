@@ -8,38 +8,33 @@ class InfoDialogBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: AlertDialog(
-          title: Text(title!),
-          content:  Text(
-              infoText!,
-           style: TextStyle(
-             fontWeight: FontWeight.bold,
-           ),
-          ),
-          actions: <Widget>[
-              ElevatedButton(
-                child: Icon(Icons.check),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  primary: Colors.amberAccent,
-                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                  textStyle: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold
-                  ),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40)
-                  )
-                ),
-              ),
-          ],
+      title: Text(title!),
+      content:  Text(
+        infoText!,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
         ),
       ),
+      actions: <Widget>[
+        ElevatedButton(
+          child: Icon(Icons.check),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          style: ElevatedButton.styleFrom(
+              elevation: 0,
+              primary: Colors.amberAccent,
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+              textStyle: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40)
+              )
+          ),
+        ),
+      ],
     );
   }
 }
