@@ -290,7 +290,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hint: "Email",
                     obscure: false,
                     stream: _signUpBloc.outEmail,
-                    onChanged: _signUpBloc.changeEmail,
+                    onChanged: _signUpBloc.changeEmail, maxLines: null, minLines: null,
                   ),
                   SizedBox(
                     height: 20,
@@ -301,7 +301,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hint: "Senha",
                     obscure: true,
                     stream: _signUpBloc.outPassword,
-                    onChanged: _signUpBloc.changePassword,
+                    onChanged: _signUpBloc.changePassword,maxLines: null, minLines: null,
                   ),
                   SizedBox(
                     height: 20,
@@ -312,7 +312,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hint: "Confirmar Senha",
                     obscure: true,
                     stream: _signUpBloc.outConfirmPassword,
-                    onChanged: _signUpBloc.changeConfirmPassword,
+                    onChanged: _signUpBloc.changeConfirmPassword,maxLines: null, minLines: null,
                   ),
                 ],
               ),
@@ -339,7 +339,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hint: "Nome Completo",
                       obscure: false,
                       stream: _signUpBloc.outName,
-                      onChanged: _signUpBloc.changeName,
+                      onChanged: _signUpBloc.changeName,maxLines: null, minLines: null,
                     ),
                     SizedBox(
                       height: 20,
@@ -350,7 +350,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hint: "Nome do Estabelecimento/Local",
                       obscure: false,
                       stream: _signUpBloc.outEstablishmentName,
-                      onChanged: _signUpBloc.changeEstablishmentName,
+                      onChanged: _signUpBloc.changeEstablishmentName,maxLines: null, minLines: null,
                     ),
                     SizedBox(
                       height: 20,
@@ -361,7 +361,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hint: "Endereço",
                       obscure: false,
                       stream: _signUpBloc.outAddress,
-                      onChanged: _signUpBloc.changeAddress,
+                      onChanged: _signUpBloc.changeAddress,maxLines: null, minLines: null,
                     ),
                     SizedBox(
                       height: 20,

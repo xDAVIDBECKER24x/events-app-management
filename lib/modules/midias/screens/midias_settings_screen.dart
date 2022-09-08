@@ -14,8 +14,6 @@ class PhotoSettingsScreen extends StatefulWidget {
   const PhotoSettingsScreen({Key? key}) : super(key: key);
 
 
-
-
   @override
   State<PhotoSettingsScreen> createState() => _PhotoSettingsScreenState();
 }
@@ -40,7 +38,7 @@ class _PhotoSettingsScreenState extends State<PhotoSettingsScreen> {
         _hasFile = true;
       });
     } on PlatformException catch (e) {
-      print("error");
+      print(e);
     }
   }
 

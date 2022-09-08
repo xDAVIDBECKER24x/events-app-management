@@ -13,14 +13,34 @@ class StorageService{
 
     String name = sha1RandomString();
     String ref = 'root/users/$currentUID/$category/$name';
-    // while(checkIfFileExist(category, name) == true){
-    //   name = sha1RandomString();
-    // }
+
     try{
       print(ref);
       print(currentUID);
       // await storage.ref('root/users/$currentUID').putFile(file);
       await storage.ref(ref).putFile(file);
+
+    }on FirebaseException catch (e){
+      print(e);
+    }
+  }
+
+  Future<void> deleteFile(File file,String category) async{
+
+
+  }
+
+
+  Future<String?> uploadFileGetDonwloadUrl(File file,String category) async {
+    String name = sha1RandomString();
+    String ref = 'root/users/$currentUID/$category/$name';
+
+    try{
+      await storage.ref(ref).putFile(file).then((_) async {
+        String downloadUrl = (await storage.ref(ref).getDownloadURL()).toString();
+        print(downloadUrl);
+        return downloadUrl;
+      });
     }on FirebaseException catch (e){
       print(e);
     }

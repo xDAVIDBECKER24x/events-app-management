@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hint: "Usuário",
                                   obscure: false,
                                   stream: _loginBloc.outEmail,
-                                  onChanged: _loginBloc.changeEmail,
+                                  onChanged: _loginBloc.changeEmail,maxLines: null, minLines: null,
                                 ),
                                 const SizedBox(
                                   height: 16,
@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hint: "Senha",
                                   obscure: true,
                                   stream: _loginBloc.outPassword,
-                                  onChanged: _loginBloc.changePassword,
+                                  onChanged: _loginBloc.changePassword,maxLines: null, minLines: null,
                                 ),
                                 const  SizedBox(
                                   height: 12,

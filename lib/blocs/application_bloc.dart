@@ -7,7 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 
-class ApplicationBloc with ChangeNotifier{
+class ApplicationBloc {
 
   StorageService storageService = StorageService();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -32,12 +32,6 @@ class ApplicationBloc with ChangeNotifier{
     } on FirebaseException catch (e){
       print(e);
     }
-  }
-
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
 
