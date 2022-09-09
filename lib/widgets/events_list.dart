@@ -50,18 +50,18 @@ class EventsList extends StatelessWidget {
                   child: Container(
                     child: Row(
                       children: [
-                        // ClipRRect(
-                        //   borderRadius: BorderRadius.circular(5),
-                        //   child: Container(
-                        //     child: FadeInImage.memoryNetwork(
-                        //       height: 80,
-                        //       width: MediaQuery.of(context).size.width / 2.5,
-                        //       placeholder: kTransparentImage,
-                        //       image: event['banner'],
-                        //       fit: BoxFit.fill,
-                        //     ),
-                        //   ),
-                        // ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Container(
+                            child: FadeInImage.memoryNetwork(
+                              height: 80,
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              placeholder: kTransparentImage,
+                              image: event['downloadUrl'],
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
                         Container(
                           padding: const EdgeInsets.only(left: 8.0),
                           width: MediaQuery.of(context).size.width / 2,

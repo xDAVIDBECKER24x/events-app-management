@@ -72,7 +72,7 @@ class SignUpBloc extends BlocBase with SignupValidators {
     _stateController.add(SignUpState.IDLE);
   }
 
-  Future<AccountMessage> signUp() async {
+  Future<ReportMessage> signUp() async {
     _stateController.add(SignUpState.LOADING);
     final email = _emailController.value;
     final password = _passwordController.value;
@@ -84,18 +84,18 @@ class SignUpBloc extends BlocBase with SignupValidators {
 
     if (password != passwordConfirm) {
       _stateController.add(SignUpState.IDLE);
-      return AccountMessage(code: 1, message: 'Senhas tem que ser iguais');
+      return ReportMessage(code: 1, message: 'Senhas tem que ser iguais');
     }
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       sendEmailVerification(email);
       currentUser = FirebaseAuth.instance.currentUser!;
-      return AccountMessage(
+      return ReportMessage(
           code: 0, message: 'Verificar email enviado para : ${email}');
     } on FirebaseException catch (error) {
       _stateController.add(SignUpState.IDLE);
-      return AccountMessage(code: 2, message: error.message!);
+      return ReportMessage(code: 2, message: error.message!);
     }
   }
 
@@ -131,12 +131,12 @@ class SignUpBloc extends BlocBase with SignupValidators {
     })
         .then((value) {
       _stateController.add(SignUpState.IDLE);
-      return AccountMessage(
+      return ReportMessage(
           code: 0, message: 'Infromações atualizadas');
     })
         .catchError((error) {
       _stateController.add(SignUpState.FAIL);
-      return AccountMessage(code: 2, message: error.message!);
+      return ReportMessage(code: 2, message: error.message!);
     });
 
   }

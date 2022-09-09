@@ -13,15 +13,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../../../core/auth/signup_validators.dart';
 import '../../../services/storage_service.dart';
 
-enum EventBlocState { IDLE, LOADING, SUCCESS, FAIL }
+enum EventState { IDLE, LOADING, SUCCESS, FAIL }
 
 class EventBloc extends BlocBase with SignupValidators {
-  final _stateController = BehaviorSubject<EventBlocState>();
+  final _stateController = BehaviorSubject<EventState>();
   ApplicationBloc aplicationBloc = ApplicationBloc();
   StorageService storageService = StorageService();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Stream<EventBlocState> get outState => _stateController.stream;
+  Stream<EventState> get outState => _stateController.stream;
 
   //First Step Sign Up
   final _nameController = BehaviorSubject<String>();
@@ -52,54 +52,72 @@ class EventBloc extends BlocBase with SignupValidators {
   late StreamSubscription _streamSubscription;
 
   Stream<bool> get outSubmitValidEvent =>
-      CombineLatestStream.combine4(
+      CombineLatestStream.combine3(
           outName,
           outAddress,
-          outDateStart,
           outInfos,
-              (a, b, c, d) {
+              (a, b, c) {
             return true;
           });
 
   EventBloc() {
-    FirebaseAuth.instance.signOut();
-    _stateController.add(EventBlocState.IDLE);
+    _stateController.add(EventState.IDLE);
   }
 
   Future<String?> uploadFile(File file) async {
-    try {
-      String? donwloadUrl = await storageService.uploadFileGetDonwloadUrl(
-          file, 'banners');
-      print(donwloadUrl);
-      return donwloadUrl;
-    } on FirebaseException catch (e) {
-      print(e);
-    }
+
+    String? downloadUrl = await storageService.uploadFileGetDonwloadUrl(
+        file, 'banners');
+    print("BLOC : $downloadUrl");
+    return downloadUrl;
+
   }
 
-  Future uploadEvent(File file, DateTime dateTimeStart,DateTime dateTimeEnd) async {
+  Future<ReportMessage> uploadEvent(File file, DateTime dateTimeStart,DateTime dateTimeEnd) async {
 
+    _stateController.add(EventState.LOADING);
     final name = _nameController.value;
     final address = _addressController.value;
     final dateStart = dateTimeStart;
     final dateEnd = dateTimeEnd;
-    final info = _infosController;
+    final info = _infosController.value;
 
+    if(currentUID == null){
+      currentUID = FirebaseAuth.instance.currentUser?.uid;
+      return ReportMessage(code: 2, message: 'Erro autenticação de usuário');
+    }
+    String? donwloadUrl = await uploadFile(file);
+    if(donwloadUrl == null){
+      _stateController.add(EventState.IDLE);
+      return ReportMessage(code: 1, message: 'Erro no upload do banner');
+    }
     try {
-      String? donwloadUrl = await uploadFile(file);
-      firestore.collection('$currentUID/events').add({
+
+      print('Current UID : $currentUID');
+      print(name);
+      print(address);
+      print(dateStart);
+      print(dateEnd);
+      print(info);
+      print(donwloadUrl);
+
+      firestore.collection('users/$currentUID/events').add({
         'name': name,
         'address': address,
         'dateStart': dateStart,
         'dateEnd': dateEnd,
         'info': info,
-        'donwloadUrl': donwloadUrl,
-      }).then((value) => null)
-          .catchError((e) => print(e));
-
-      print(donwloadUrl);
+        'downloadUrl': donwloadUrl,
+      }).then((value) {
+        _stateController.add(EventState.SUCCESS);
+        return ReportMessage(code: 0, message: 'Evento criado');
+      } ).catchError((e) => print(e));
+      _stateController.add(EventState.IDLE);
+      return ReportMessage(code: 2, message: 'Erro no cadastro do evento');
     } on FirebaseException catch (e) {
       print(e);
+      _stateController.add(EventState.IDLE);
+      return ReportMessage(code: 2, message: 'Erro no cadastro do evento');
     }
   }
 

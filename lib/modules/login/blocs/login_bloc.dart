@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:events_app_management/constants.dart';
 import 'package:events_app_management/core/auth/login_validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,6 +32,7 @@ class LoginBloc extends BlocBase with LoginValidators{
 
       if(user != null){
         if(await verifyPrivileges(user)){
+          currentUID = FirebaseAuth.instance.currentUser?.uid;
           _stateController.add(LoginState.SUCCESS);
         } else {
           FirebaseAuth.instance.signOut();

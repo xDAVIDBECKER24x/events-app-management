@@ -31,19 +31,22 @@ class StorageService{
   }
 
 
-  Future<String?> uploadFileGetDonwloadUrl(File file,String category) async {
+  Future<String> uploadFileGetDonwloadUrl(File file,String category) async {
     String name = sha1RandomString();
     String ref = 'root/users/$currentUID/$category/$name';
+    String downloadUrl = '';
 
     try{
       await storage.ref(ref).putFile(file).then((_) async {
-        String downloadUrl = (await storage.ref(ref).getDownloadURL()).toString();
+        downloadUrl = await storage.ref(ref).getDownloadURL();
+        print(downloadUrl.runtimeType);
         print(downloadUrl);
-        return downloadUrl;
       });
     }on FirebaseException catch (e){
       print(e);
+
     }
+    return downloadUrl;
   }
 
   Future getFireStorageFiles(String category) async {

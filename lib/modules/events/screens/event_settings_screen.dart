@@ -76,7 +76,7 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
           future: _loadEvents(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              // return EventsList(snapshot: snapshot);
+              return EventsList(snapshot: snapshot);
             }
             return Container(
               margin: EdgeInsets.only(bottom: 46),

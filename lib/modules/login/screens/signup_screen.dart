@@ -123,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                           if (currentStep == 1) {
                             print('Criar Conta');
-                            AccountMessage accountMessage =
+                            ReportMessage accountMessage =
                                 await _signUpBloc.signUp();
                             print('-------------------');
                             print(accountMessage.message);

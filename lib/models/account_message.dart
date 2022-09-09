@@ -1,10 +1,10 @@
 
-class AccountMessage {
+class ReportMessage {
 
   late int code;
   late String message;
 
-  AccountMessage({
+  ReportMessage({
     required this.code,
     required this.message
   });
