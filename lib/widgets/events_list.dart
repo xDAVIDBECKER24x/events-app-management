@@ -1,13 +1,8 @@
 import 'dart:core';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:events_app_management/constants.dart';
+import 'package:events_app_management/utils/date_utils.dart';
 import 'package:events_app_management/widgets/button_add.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
-
 import '../modules/events/screens/event_edit_screen.dart';
 
 class EventsList extends StatelessWidget {
@@ -42,7 +37,7 @@ class EventsList extends StatelessWidget {
                 onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  EventEditScreen(url : event['url'],)),
+                      MaterialPageRoute(builder: (context) =>  EventEditScreen(event: event)),
                     );
                  },
                 child: Card(
@@ -70,8 +65,7 @@ class EventsList extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                maxLines: 1,
-                                '24 Outubro',
+                                timestampToDateFormatted(event['dateStart']),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.black,
