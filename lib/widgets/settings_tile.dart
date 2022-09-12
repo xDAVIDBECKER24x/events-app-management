@@ -1,10 +1,10 @@
 import 'package:events_app_management/models/settings_model.dart';
 import 'package:events_app_management/modules/events/screens/event_settings_screen.dart';
-import 'package:events_app_management/modules/geral/screens/geral_settings_screen.dart';
 import 'package:events_app_management/modules/midias/screens/midias_settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../modules/codes/screens/codes_settings_screen.dart';
+import '../modules/settings/screens/settings_screen.dart';
 
 class SettingsTile extends StatelessWidget {
   SettingsTile({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> pageRoutes = [
-      GeralSettingsScreen(),
+      SettingsScreen(),
       PhotoSettingsScreen(),
       EventsSettingsScreen(),
       CodesSettingsScreen(),

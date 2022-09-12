@@ -35,8 +35,6 @@ class EventBloc extends BlocBase with SignupValidators {
   Stream<String> get outAddress =>
       _addressController.stream.transform(validateNameField);
 
-  Stream<String> get outDateStart =>
-      _dateStartController.stream.transform(validateNameField);
 
   Stream<String> get outInfos =>
       _infosController.stream.transform(validateNameField);
@@ -44,8 +42,6 @@ class EventBloc extends BlocBase with SignupValidators {
   Function(String) get changeName => _nameController.sink.add;
 
   Function(String) get changeAddress => _addressController.sink.add;
-
-  Function(String) get changeDateStart => _dateStartController.sink.add;
 
   Function(String) get changeInfos => _infosController.sink.add;
 

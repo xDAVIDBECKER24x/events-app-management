@@ -24,17 +24,6 @@ class WelcomeScreen extends StatelessWidget {
                  Expanded(
                   child: WelcomeImage(),
                 ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      SizedBox(
-                        width: 450,
-                        child: WebWelcomeScreen(),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
             mobile: const MobileWelcomeScreen(),
@@ -75,23 +64,5 @@ class MobileWelcomeScreen extends StatelessWidget {
       ],
     );
   }
-}
-
-class WebWelcomeScreen extends StatelessWidget{
-  const WebWelcomeScreen({
-    Key? key,
-  }) : super(key: key);
-
-
-  Widget build(BuildContext context){
-    return  Column(
-      children: [
-        WelcomeButton(text: 'Login', color: Colors.amberAccent,route : LoginScreen(), textColor: Colors.white,),
-        const SizedBox(height: 16),
-        WelcomeButton(text: 'Sign Up', color: kPrimaryLightColor,route : SignUpScreen(), textColor: Colors.grey,),
-      ],
-    );
-  }
-
 }
 

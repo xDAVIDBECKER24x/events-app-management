@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:events_app_management/models/account_message.dart';
-import 'package:events_app_management/modules/home/screens/home_screen.dart';
-import 'package:events_app_management/modules/login/blocs/login_bloc.dart';
 import 'package:events_app_management/modules/login/blocs/signup_bloc.dart';
 import 'package:events_app_management/modules/login/screens/login_screen.dart';
 import 'package:events_app_management/modules/welcome/screens/welcome_screen.dart';
 import 'package:events_app_management/widgets/input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../../components/background_images.dart';
 import '../../../constants.dart';
 import '../../../responsive.dart';
@@ -30,6 +25,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late Timer? timer;
   late User? user = FirebaseAuth.instance.currentUser;
 
+  final List _filtersTypes = [];
+
   late String email = '';
   late String password = '';
   late String passwordConfirm = '';
@@ -39,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
 
     if (!isEmailVerified && user != null) {
-      timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         checkEmailVerified();
       });
     }
@@ -113,8 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               currentStep == getSteps().length - 1;
 
                           if (isLastStep) {
-                            _signUpBloc.finalizeSignup();
-                            print('Finalizado');
+                            _signUpBloc.addPreferences(_filtersTypes);
                           }
 
                           setState(() {
@@ -122,7 +118,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           });
 
                           if (currentStep == 1) {
-                            print('Criar Conta');
                             ReportMessage accountMessage =
                                 await _signUpBloc.signUp();
                             print('-------------------');
@@ -179,21 +174,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     builder: (context, snapshot) {
                                       return ElevatedButton(
                                         onPressed: controls.onStepCancel,
-                                        child: const Icon(
-                                            Icons.arrow_back_sharp,
-                                            size: 32
-                                        ),
                                         style: ElevatedButton.styleFrom(
                                             elevation: 0,
                                             primary: Colors.grey,
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 horizontal: 40, vertical: 15),
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 30,
                                                 fontWeight: FontWeight.bold),
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                 BorderRadius.circular(40))),
+                                        child: const Icon(
+                                            Icons.arrow_back_sharp,
+                                            size: 32
+                                        ),
                                       );
                                     },
                                   ),
@@ -208,18 +203,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       onPressed: snapshot.hasData
                                           ? controls.onStepContinue
                                           : null,
-                                      child: const Icon(Icons.check, size: 32),
                                       style: ElevatedButton.styleFrom(
                                           elevation: 0,
                                           primary: Colors.amberAccent,
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               horizontal: 40, vertical: 15),
-                                          textStyle: TextStyle(
+                                          textStyle: const TextStyle(
                                               fontSize: 30,
                                               fontWeight: FontWeight.bold),
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(40))),
+                                      child: const Icon(Icons.check, size: 32),
                                     );
                                   },
                                 ),
@@ -231,7 +226,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     );
                 }
               }
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }),
         desktop: Row(
           children: [
@@ -271,6 +266,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   List<Step> getSteps() {
+
     return [
       Step(
         isActive: currentStep >= 0 ,
@@ -375,27 +371,56 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
       Step(
         isActive: currentStep >= 2,
-        title: Text('Preferências'),
+        title: const Text('Preferências'),
         content: SingleChildScrollView(
           child: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Wrap(
-                    direction: Axis.vertical,
-                    children: googlePlaceTypeListRaw.map((item) =>
-                        FilterChip(
-                          label : Text(item),
-                          onSelected: (bool value) {  },
-                        )).toList(),
+            padding: const EdgeInsets.only(top: 4.0,bottom: 12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Defina os tópicos de interesse...',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold
                   ),
-                 ],
                 ),
-              )
+                const SizedBox(
+                  height: 14,
+                ),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 2,
+                  children: trendPlaceTypeList.map((item) =>
+                      FilterChip(
+                        label : Text(
+                            item,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14
+                          ),
+                        ),
+                        selected: _filtersTypes.contains(item),
+                        selectedColor: Colors.amber,
+                        onSelected: (bool value) {
 
-            ),
+                          setState((){
+                            if(value){
+                              _filtersTypes.add(item);
+                            }
+                            else{
+                              _filtersTypes.removeWhere((name){
+                                return name == item;
+                              });
+                            }
+                            print(_filtersTypes);
+                          });
+                        },
+                      )).toList(),
+                ),
+               ],
+              ),
+            )
           ),
       ),
     ];

@@ -109,6 +109,8 @@ class SignUpBloc extends BlocBase with SignupValidators {
   }
 
   Future addInfoSignup() async {
+
+
     _stateController.add(SignUpState.LOADING);
     String uid = currentUser.uid;
     String? email = currentUser.email;
@@ -122,8 +124,7 @@ class SignUpBloc extends BlocBase with SignupValidators {
     print(name);
     print(establishment);
 
-    await firestore.collection('partners').add({
-      'uid': uid,
+    await firestore.collection('users').doc(uid).set({
       'email': email,
       'address': address,
       'name': name,
@@ -141,7 +142,13 @@ class SignUpBloc extends BlocBase with SignupValidators {
 
   }
 
-  Future finalizeSignup() async {}
+  Future addPreferences(List filters) async {
+    _stateController.add(SignUpState.LOADING);
+    await firestore.collection('users').doc(currentUser.uid).set({
+      'types': filters,
+    },SetOptions(merge: true)).then((value) => _stateController.add(SignUpState.SUCCESS));
+
+  }
 
   bool checkEmailVerified() {
     try {
@@ -156,9 +163,9 @@ class SignUpBloc extends BlocBase with SignupValidators {
     return false;
   }
 
-  Future<bool> verifyAdmin(User user) async {
+  Future<bool> verifyUser(User user) async {
     return await FirebaseFirestore.instance
-        .collection("admins")
+        .collection("users")
         .doc(user.uid)
         .get()
         .then((document) {

@@ -1,6 +1,3 @@
-
-import 'file_model.dart';
-
 class Events{
 
   String name;

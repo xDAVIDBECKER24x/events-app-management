@@ -7,6 +7,7 @@ const kPrimaryLightColor = Color(0xFFF1E6FF);
 const double defaultPadding = 16.0;
 String? currentUID = FirebaseAuth.instance.currentUser?.uid;
 
+bool themeMode = false;
 const List<String> midiaCategories = <String>['pictures', 'banners'];
 
 
@@ -23,5 +24,17 @@ const googlePlaceTypeListRaw = ["accounting", "airport", "amusement_park", "aqua
   "store", "subway_station", "supermarket", "synagogue", "taxi_stand", "tourist_attraction", "train_station", "transit_station",
   "travel_agency", "university", "veterinary_care", "zoo"];
 
+const googlePlaceTypeListPTBR = ["contabilidade", "aeroporto", "parque de diversões", "aquário", "galeria de arte", "caixa eletrônico", "padaria", "banco", "bar",
+  "salão de beleza", "loja de bicicletas", "livraria", "pista de boliche", "estação de ônibus", "café", "camping", "revendedor de carros", "aluguel de carros",
+  "reparação de automóveis", "lavagem de carros", "cassino", "cemitério", "igreja", "prefeitura", "loja de roupas", "loja de conveniência", "tribunal", "dentista",
+  "loja de departamentos", "médico", "droga", "eletricista", "loja de eletrônicos", "embaixada", "corpo de bombeiros", "florista", "funerária",
+  "loja de móveis", "posto de gasolina", "academia", "cuidados com os cabelos", "loja de ferragens", "templo hindu", "loja de artigos para o lar", "hospital", "agência de seguros",
+  "joalheria", "lavanderia", "advogado", "biblioteca", "estação de trem leve", "loja de bebidas", "escritório do governo local", "seralheiro", "hospedagem",
+  "entrega de refeições", "refeição para levar", "mesquita", "aluguel de filmes", "cinema", "empresa de mudanças", "museu", "boate", "pintor", "parque",
+  "estacionamento", "pet shop", "farmácia", "fisioterapeuta", "encanador", "polícia", "correio", "escola primária", "agência imobiliária",
+  "restaurante", "empreiteiro de telhados", "parque de trailers", "escola", "escola secundária", "loja de sapatos", "centro comercial", "spa", "estádio", "armazenamento",
+  "loja", "estação de metrô", "supermercado", "sinagoga", "ponto de táxi", "atração turística", "estação de trem", "estação de trânsito",
+  "agência de viagens", "universidade", "atendimento veterinário", "zoológico"];
 
-
+const trendPlaceTypeList = ['parque de diversões',"galeria de arte","bar","pista de boliche","café","cassino","hospedagem","loja de bebidas" ,"museu", "boate",
+  "parque", "refeição para levar","restaurante","centro comercial","spa", "universidade","show","exposição",];
