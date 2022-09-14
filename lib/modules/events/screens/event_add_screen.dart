@@ -112,6 +112,8 @@ class _EventAddScreenState extends State<EventAddScreen> {
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../../../core/auth/signup_validators.dart';
 import '../../../services/storage_service.dart';
@@ -23,7 +22,7 @@ class EventBloc extends BlocBase with SignupValidators {
 
   Stream<EventState> get outState => _stateController.stream;
 
-  //First Step Sign Up
+
   final _nameController = BehaviorSubject<String>();
   final _addressController = BehaviorSubject<String>();
   final _dateStartController = BehaviorSubject<String>();
@@ -104,6 +103,7 @@ class EventBloc extends BlocBase with SignupValidators {
         'dateEnd': dateEnd,
         'info': info,
         'downloadUrl': donwloadUrl,
+        'isActive' : true,
       }).then((value) {
         _stateController.add(EventState.SUCCESS);
         return ReportMessage(code: 0, message: 'Evento criado');

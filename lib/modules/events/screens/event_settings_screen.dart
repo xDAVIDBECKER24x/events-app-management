@@ -1,16 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:events_app_management/blocs/application_bloc.dart';
-import 'package:events_app_management/models/events_model.dart';
-import 'package:events_app_management/modules/events/screens/event_add_screen.dart';
 import 'package:events_app_management/widgets/button_add.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../../constants.dart';
-import '../../../services/storage_service.dart';
 import '../../../widgets/events_list.dart';
-import '../../../widgets/info_dialog_box.dart';
+import 'event_add_screen.dart';
 
 class EventsSettingsScreen extends StatefulWidget {
   const EventsSettingsScreen({Key? key}) : super(key: key);
@@ -29,12 +22,10 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
         .collection("users")
         .doc("${currentUID}")
         .collection('events')
-        .get();
+        .where("isActive", isEqualTo: true).get();
 
     final events = ref.docs.map((doc) => doc.data()).toList();
 
-    print(events);
-    print(events.runtimeType);
     return events;
   }
 
@@ -85,7 +76,7 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
               width: MediaQuery.of(context).size.width,
               child: CustomScrollView(slivers: [
                 SliverToBoxAdapter(
-                  child: ButtonAdd()
+                  child: ButtonAdd(widget: EventAddScreen(),)
                 ),
                 SliverToBoxAdapter(
                     child: Container(

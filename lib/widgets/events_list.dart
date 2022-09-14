@@ -3,6 +3,7 @@ import 'package:events_app_management/utils/date_utils.dart';
 import 'package:events_app_management/widgets/button_add.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
+import '../modules/events/screens/event_add_screen.dart';
 import '../modules/events/screens/event_edit_screen.dart';
 
 class EventsList extends StatelessWidget {
@@ -25,14 +26,13 @@ class EventsList extends StatelessWidget {
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: ButtonAdd(),
+            child: ButtonAdd(widget: EventAddScreen(),),
           ),
           SliverList(
               delegate: SliverChildBuilderDelegate(
             childCount: events.length,
             (BuildContext context, int index) {
               final Map<String, dynamic> event = events[index];
-
               return GestureDetector(
                 onTap: (){
                     Navigator.push(
@@ -41,7 +41,7 @@ class EventsList extends StatelessWidget {
                     );
                  },
                 child: Card(
-                  elevation: 2,
+                  elevation: 3,
                   child: Container(
                     child: Row(
                       children: [
@@ -50,7 +50,7 @@ class EventsList extends StatelessWidget {
                           child: Container(
                             child: FadeInImage.memoryNetwork(
                               height: 80,
-                              width: MediaQuery.of(context).size.width / 2.5,
+                              width: MediaQuery.of(context).size.width/2 -20,
                               placeholder: kTransparentImage,
                               image: event['downloadUrl'],
                               fit: BoxFit.fill,
@@ -59,7 +59,7 @@ class EventsList extends StatelessWidget {
                         ),
                         Container(
                           padding: const EdgeInsets.only(left: 8.0),
-                          width: MediaQuery.of(context).size.width / 2,
+                          width: MediaQuery.of(context).size.width / 2 -40,
                           height: 80,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,

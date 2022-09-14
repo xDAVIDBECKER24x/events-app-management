@@ -17,32 +17,32 @@ class Settings{
     return [
       Settings(
           bgColor: Colors.white,
-          iconColor: Colors.grey,
+          iconColor: Colors.blueGrey,
           btnColor: Colors.white,
           icon: Icons.settings,
-          title: 'Geral'
-      ),
-      Settings(
-          bgColor: Colors.white,
-          iconColor: Colors.grey,
-          btnColor: Colors.white,
-          icon: Icons.photo,
-          title: 'Midias'
-      ),
-      Settings(
-          bgColor: Colors.white,
-          iconColor: Colors.grey,
-          btnColor: Colors.white,
-          icon: Icons.event_available,
-          title: 'Events'
+          title: 'Configs'
       ),
       // Settings(
-      //     bgColor: Colors.grey,
-      //     iconColor: Colors.blueGrey,
-      //     btnColor: Colors.grey,
-      //     icon: Icons.qr_code,
-      //     title: 'Cupons'
+      //     bgColor: Colors.white,
+      //     iconColor: Colors.grey,
+      //     btnColor: Colors.white,
+      //     icon: Icons.photo,
+      //     title: 'Midias'
       // ),
+      Settings(
+          bgColor: Colors.white,
+          iconColor: Colors.blueGrey,
+          btnColor: Colors.white,
+          icon: Icons.event_available,
+          title: 'Eventos'
+      ),
+      Settings(
+          bgColor: Colors.white,
+          iconColor: Colors.blueGrey,
+          btnColor: Colors.white,
+          icon: Icons.qr_code,
+          title: 'Cupons'
+      ),
       // Settings(
       //     bgColor: Colors.grey,
       //     iconColor: Colors.blueGrey,

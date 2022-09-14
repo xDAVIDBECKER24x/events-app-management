@@ -58,6 +58,10 @@ dependencies:
   introduction_screen: ^3.0.2
   shared_preferences: ^2.0.15
   after_layout: ^1.2.0
+  qr_code_scanner: ^1.0.1
+  ticket_material: ^0.3.1
+  pretty_qr_code: ^2.0.2
+
 
 
 
@@ -75,20 +79,19 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 flutter_icons:
-  android: true
+  android: "launcher_icon"
   ios: true
   image_path: "assets/images/app_icon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "path/to/image.png"
+    image_path: "assets/images/app_icon.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "path/to/image.png"
+    image_path: "assets/images/app_icon.png"
     icon_size: 48 # min:48, max:256, default: 48
 
 # The following section is specific to Flutter packages.
@@ -102,6 +105,7 @@ flutter:
     - assets/icons/chat.svg
     - assets/icons/login.svg
     - assets/icons/upload_icon.png
+
 
 
   # The following line ensures that the Material Icons font is

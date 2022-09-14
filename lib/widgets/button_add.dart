@@ -2,10 +2,11 @@ import 'package:events_app_management/modules/events/screens/event_add_screen.da
 import 'package:flutter/material.dart';
 
 class ButtonAdd extends StatelessWidget {
-  const ButtonAdd({Key? key}) : super(key: key);
+  const ButtonAdd({Key? key, required this.widget}) : super(key: key);
+  final Widget widget;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context ) {
     return Container(
       margin: EdgeInsets.all(16),
       padding: EdgeInsets.all(8),
@@ -24,7 +25,7 @@ class ButtonAdd extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              builder: (context) => Container(height : MediaQuery.of(context).size.height-15,child: EventAddScreen(),),
+              builder: (context) => Container(height : MediaQuery.of(context).size.height-15,child: widget,),
             )
         ),
       ),

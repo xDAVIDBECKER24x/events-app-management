@@ -74,7 +74,7 @@ AppBar _buildAppBar(context){
                     text: "Burguinhosss sssss",
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 26,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold
                     ),
                   ),
@@ -85,22 +85,6 @@ AppBar _buildAppBar(context){
       ],
     ) ,
     actions: [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(50),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.white
-          ),
-          onPressed: (){
-            showDialog(context: context,  builder: (context) => LogoutDialog(context),);
-          },
-          child: Icon(
-            Icons.exit_to_app,
-            color: Colors.grey,
-            size: 34,
-          ),
-        ),
-      )
     ],
   );
 }

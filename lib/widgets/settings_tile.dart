@@ -3,7 +3,7 @@ import 'package:events_app_management/modules/events/screens/event_settings_scre
 import 'package:events_app_management/modules/midias/screens/midias_settings_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../modules/codes/screens/codes_settings_screen.dart';
+import '../modules/codes/screens/code_settings_screen.dart';
 import '../modules/settings/screens/settings_screen.dart';
 
 class SettingsTile extends StatelessWidget {
@@ -16,7 +16,7 @@ class SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> pageRoutes = [
       SettingsScreen(),
-      PhotoSettingsScreen(),
+      // PhotoSettingsScreen(),
       EventsSettingsScreen(),
       CodesSettingsScreen(),
     ];
@@ -45,7 +45,7 @@ class SettingsTile extends StatelessWidget {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(36.0),
+                      padding: const EdgeInsets.all(24.0),
                       child: Column(
                             // crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -61,13 +61,10 @@ class SettingsTile extends StatelessWidget {
                                 settingsList[index].title!,
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 18,
+                                    fontSize: 22,
                                     fontWeight: FontWeight.bold
                                 ),
                               ),
-                              // SizedBox(
-                              //   height: 22,
-                              // ),
                             ],
                           ),
                     ),

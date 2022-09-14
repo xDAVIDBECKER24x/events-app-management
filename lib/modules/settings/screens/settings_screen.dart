@@ -114,6 +114,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   title: 'Email',
                                   subtitle: _settingsBloc.userData['email'],
                                 ),
+
+                                // SettingsItem(
+                                //   onTap: () {},
+                                //   icons: Icons.dark_mode_rounded,
+                                //   iconStyle: IconStyle(
+                                //     iconsColor: Colors.white,
+                                //     withBackground: true,
+                                //     backgroundColor: Colors.deepPurpleAccent,
+                                //   ),
+                                //   title: 'Dark mode',
+                                //   subtitle: "Automático",
+                                //   trailing: Switch.adaptive(
+                                //     value: false,
+                                //     onChanged: (value) {},
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                            Divider(),
+                            SettingsGroup(
+                              items:[
                                 SettingsItem(
                                   onTap: () {},
                                   icons: Icons.location_city_outlined,
@@ -125,22 +146,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ),
                                 SettingsItem(
                                   onTap: () {},
-                                  icons: Icons.dark_mode_rounded,
+                                  icons: Icons.star,
                                   iconStyle: IconStyle(
-                                    iconsColor: Colors.white,
-                                    withBackground: true,
-                                    backgroundColor: Colors.deepPurpleAccent,
+                                    backgroundColor: Colors.amberAccent,
                                   ),
-                                  title: 'Dark mode',
-                                  subtitle: "Automático",
-                                  trailing: Switch.adaptive(
-                                    value: false,
-                                    onChanged: (value) {},
-                                  ),
+                                  title: 'Preferências',
+                                  subtitle: _settingsBloc.userData['address'],
                                 ),
-                              ],
+
+                              ]
                             ),
-                            Divider(),// You can add a settings title
+                            Divider(),
                             SettingsGroup(
                               items: [
                                 SettingsItem(
