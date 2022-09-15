@@ -96,7 +96,7 @@ class EventBloc extends BlocBase with SignupValidators {
       print(info);
       print(donwloadUrl);
 
-      firestore.collection('users/$currentUID/events').add({
+      firestore.collection('events').add({
         'name': name,
         'address': address,
         'dateStart': dateStart,
@@ -104,6 +104,7 @@ class EventBloc extends BlocBase with SignupValidators {
         'info': info,
         'downloadUrl': donwloadUrl,
         'isActive' : true,
+        'idUser' : currentUID
       }).then((value) {
         _stateController.add(EventState.SUCCESS);
         return ReportMessage(code: 0, message: 'Evento criado');

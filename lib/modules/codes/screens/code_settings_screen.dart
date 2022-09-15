@@ -23,18 +23,13 @@ class _CodesSettingsScreenState extends State<CodesSettingsScreen> {
   final String data = "https://www.google.com/";
 
   Future _loadCodes() async {
-    print(currentUID);
 
     final ref = await FirebaseFirestore.instance
-        .collection("users")
-        .doc("${currentUID}")
-        .collection('codes')
-        .get();
+        .collection("codes")
+        .where("idUser", isEqualTo: currentUID).get();
 
     final codes = ref.docs.map((doc) => doc.data()).toList();
 
-    print(codes);
-    print(codes.runtimeType);
     return codes;
   }
 
@@ -102,7 +97,7 @@ class _CodesSettingsScreenState extends State<CodesSettingsScreen> {
               context,
               MaterialPageRoute(builder: (context) => QrcodeScanScreen()),
             );
-            print('snac');
+
           },
           backgroundColor: Colors.amber,
           child: const Icon(

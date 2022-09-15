@@ -35,7 +35,6 @@ class CodesList extends StatelessWidget {
             childCount: codes.length,
             (BuildContext context, int index) {
               final Map<String, dynamic> code = codes[index];
-
               return Container(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: TicketMaterial(
@@ -83,7 +82,7 @@ class CodesList extends StatelessWidget {
                     child: PrettyQr(
                       typeNumber: 3,
                       size: 200,
-                      data: 'teste',
+                      data:  code['name'] ,
                       errorCorrectLevel: QrErrorCorrectLevel.M,
                       roundEdges: true,
                     ),

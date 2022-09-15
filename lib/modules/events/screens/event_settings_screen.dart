@@ -19,10 +19,8 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
     print(currentUID);
 
     final ref = await FirebaseFirestore.instance
-        .collection("users")
-        .doc("${currentUID}")
-        .collection('events')
-        .where("isActive", isEqualTo: true).get();
+        .collection("events")
+        .where("idUser", isEqualTo: currentUID).get();
 
     final events = ref.docs.map((doc) => doc.data()).toList();
 
