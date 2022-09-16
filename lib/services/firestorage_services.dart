@@ -25,13 +25,23 @@ class StorageService{
     }
   }
 
-  Future<void> deleteFile(File file,String category) async{
+  Future<void> deleteFile(String fileName,String category) async{
 
+    String ref = 'root/users/$currentUID/$category/$fileName';
+
+    try{
+      print(ref);
+      print(currentUID);
+      await storage.ref(ref).delete();
+
+    }on FirebaseException catch (e){
+      print(e);
+    }
 
   }
 
 
-  Future<String> uploadFileGetDonwloadUrl(File file,String category) async {
+  Future<Map<String, dynamic>> uploadFileGetDonwloadUrl(File file,String category) async {
     String name = sha1RandomString();
     String ref = 'root/users/$currentUID/$category/$name';
     String downloadUrl = '';
@@ -46,7 +56,7 @@ class StorageService{
       print(e);
 
     }
-    return downloadUrl;
+    return {'downloadUrl' : downloadUrl, 'fileName' : name};
   }
 
   Future getFireStorageFiles(String category) async {

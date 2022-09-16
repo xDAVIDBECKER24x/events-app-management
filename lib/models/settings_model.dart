@@ -43,13 +43,13 @@ class Settings{
           icon: Icons.qr_code,
           title: 'Cupons'
       ),
-      // Settings(
-      //     bgColor: Colors.grey,
-      //     iconColor: Colors.blueGrey,
-      //     btnColor: Colors.grey,
-      //     icon: Icons.star_outline,
-      //     title: 'Destaques'
-      // ),
+      Settings(
+          bgColor: Colors.white,
+          iconColor: Colors.blueGrey,
+          btnColor: Colors.white,
+          icon: Icons.history,
+          title: 'Log'
+      ),
       // Settings(
       //     bgColor: Colors.grey,
       //     iconColor: Colors.blueGrey,

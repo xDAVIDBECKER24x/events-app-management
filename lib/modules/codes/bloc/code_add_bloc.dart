@@ -11,7 +11,7 @@ import 'package:events_app_management/constants.dart';
 import 'package:events_app_management/models/account_message.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import '../../../services/storage_service.dart';
+import '../../../services/firestorage_services.dart';
 
 
 enum CodeAddState {IDLE, LOADING, SUCCESS, FAIL}
@@ -58,12 +58,11 @@ class CodeAddBloc extends BlocBase with EventValidators{
     _stateController.add(CodeAddState.IDLE);
   }
 
-  Future<String?> uploadFile(File file) async {
+  Future<Map<String, dynamic>?> uploadFile(File file) async {
 
-    String? downloadUrl = await storageService.uploadFileGetDonwloadUrl(
-        file, 'banners');
-    print("$downloadUrl");
-    return downloadUrl;
+    Map<String, dynamic>? fileUploadInfo = await storageService.uploadFileGetDonwloadUrl(
+        file, 'codes');
+    return fileUploadInfo;
 
   }
 
@@ -77,8 +76,8 @@ class CodeAddBloc extends BlocBase with EventValidators{
     final info = _infoController.value;
 
 
-    String? donwloadUrl = await uploadFile(file);
-    if(donwloadUrl == null){
+    Map<String, dynamic>? fileUploadInfo = await uploadFile(file);
+    if(fileUploadInfo == null){
       _stateController.add(CodeAddState.IDLE);
       return ReportMessage(code: 1, message: 'Erro no upload do cupom');
     }
@@ -88,14 +87,14 @@ class CodeAddBloc extends BlocBase with EventValidators{
       print('Current UID : $currentUID');
       print(name);
       print(info);
-      print(donwloadUrl);
 
       if(idEvent == ''){
         firestore.collection('codes').add({
           'idUser' :currentUID,
           'name': name,
           'info': info,
-          'downloadUrl': donwloadUrl,
+          'downloadUrl': fileUploadInfo!['downloadUrl'],
+          'codeBannerName' : fileUploadInfo['name'],
         }).then((value) {
           _stateController.add(CodeAddState.SUCCESS);
           return ReportMessage(code: 0, message: 'Evento criado');
@@ -108,7 +107,8 @@ class CodeAddBloc extends BlocBase with EventValidators{
         'idUser' :currentUID,
         'name': name,
         'info': info,
-        'downloadUrl': donwloadUrl,
+        'downloadUrl': fileUploadInfo['downloadUrl'],
+        'codeBannerName' : fileUploadInfo['name'],
         'idEvent' : idEvent,
       }).then((value) {
         _stateController.add(CodeAddState.SUCCESS);

@@ -11,13 +11,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../../../core/auth/signup_validators.dart';
-import '../../../services/storage_service.dart';
+import '../../../services/firestorage_services.dart';
 
 enum EventAddState { IDLE, LOADING, SUCCESS, FAIL }
 
 class EventAddBloc extends BlocBase with SignupValidators {
   final _stateController = BehaviorSubject<EventAddState>();
-  ApplicationBloc aplicationBloc = ApplicationBloc();
   StorageService storageService = StorageService();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -60,12 +59,12 @@ class EventAddBloc extends BlocBase with SignupValidators {
     _stateController.add(EventAddState.IDLE);
   }
 
-  Future<String?> uploadFile(File file) async {
+  Future<Map<String, dynamic>?> uploadFile(File file) async {
 
-    String? downloadUrl = await storageService.uploadFileGetDonwloadUrl(
-        file, 'banners');
-    print("BLOC : $downloadUrl");
-    return downloadUrl;
+    Map<String, dynamic> fileUploadInfo = await storageService.uploadFileGetDonwloadUrl(
+        file, 'events');
+    print("File URL : ${fileUploadInfo['downloadUrl']}");
+    return fileUploadInfo;
 
   }
 
@@ -82,8 +81,8 @@ class EventAddBloc extends BlocBase with SignupValidators {
       currentUID = FirebaseAuth.instance.currentUser?.uid;
       return ReportMessage(code: 2, message: 'Erro autenticação de usuário');
     }
-    String? donwloadUrl = await uploadFile(file);
-    if(donwloadUrl == null){
+    Map<String, dynamic>? fileUploadInfo = await uploadFile(file);
+    if(fileUploadInfo == null){
       _stateController.add(EventAddState.IDLE);
       return ReportMessage(code: 1, message: 'Erro no upload do banner');
     }
@@ -95,7 +94,7 @@ class EventAddBloc extends BlocBase with SignupValidators {
       print(dateStart);
       print(dateEnd);
       print(info);
-      print(donwloadUrl);
+      print(fileUploadInfo['downloadUrl']);
 
       firestore.collection('events').add({
         'name': name,
@@ -103,7 +102,8 @@ class EventAddBloc extends BlocBase with SignupValidators {
         'dateStart': dateStart,
         'dateEnd': dateEnd,
         'info': info,
-        'downloadUrl': donwloadUrl,
+        'downloadUrl': fileUploadInfo['downloadUrl'],
+        'eventBannerName' : fileUploadInfo['fileName'],
         'isActive' : true,
         'idUser' : currentUID
       }).then((value) {

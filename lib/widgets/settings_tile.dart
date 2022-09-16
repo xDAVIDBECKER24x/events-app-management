@@ -4,6 +4,7 @@ import 'package:events_app_management/modules/midias/screens/midias_settings_scr
 import 'package:flutter/material.dart';
 
 import '../modules/codes/screens/code_settings_screen.dart';
+import '../modules/logs/screens/logs_settings_screen.dart';
 import '../modules/settings/screens/settings_screen.dart';
 
 class SettingsTile extends StatelessWidget {
@@ -19,6 +20,7 @@ class SettingsTile extends StatelessWidget {
       // PhotoSettingsScreen(),
       EventsSettingsScreen(),
       CodesSettingsScreen(),
+      LogsSettingsScreen(),
     ];
     return Expanded(
       child: Container(

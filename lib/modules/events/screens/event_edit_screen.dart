@@ -19,7 +19,7 @@ class EventEditScreen extends StatelessWidget {
               background:  FadeInImage.memoryNetwork(
                 width: MediaQuery.of(context).size.width,
                 placeholder: kTransparentImage,
-                image: event['downloadUrl'],
+                image: event['data']['downloadUrl'],
                 fit: BoxFit.cover,
               ),
             ),
@@ -41,7 +41,7 @@ class EventEditScreen extends StatelessWidget {
                 child: Column(
               children: [
                 Text(
-                  event['name'],
+                  event['data']['name'],
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -53,7 +53,7 @@ class EventEditScreen extends StatelessWidget {
                   children: [
                     Icon(Icons.event_available),
                     Text(
-                      timestampToDateFormatted(event['dateStart']),
+                      timestampToDateFormatted(event['data']['dateStart']),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -67,7 +67,7 @@ class EventEditScreen extends StatelessWidget {
                   children: [
                     Icon(Icons.timer),
                     Text(
-                      timestampToTimeFormatted(event['dateStart']),
+                      timestampToTimeFormatted(event['data']['dateStart']),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@ class EventEditScreen extends StatelessWidget {
                   children: [
                     Icon(Icons.pin_drop_rounded),
                     Text(
-                      event['address'],
+                      event['data']['address'],
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
