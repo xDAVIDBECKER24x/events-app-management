@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../../../widgets/info_dialog_box.dart';
 import '../../../widgets/input_field.dart';
-import '../bloc/event_bloc.dart';
+import '../bloc/event_add_bloc.dart';
 import 'dart:io';
 
 class EventAddScreen extends StatefulWidget {
@@ -18,7 +18,7 @@ class EventAddScreen extends StatefulWidget {
 }
 
 class _EventAddScreenState extends State<EventAddScreen> {
-  final _eventBloc = EventBloc();
+  final _eventAddBloc = EventAddBloc();
   File? file;
   bool _hasFile = false;
   DateTime currentDate = DateTime.now();
@@ -44,13 +44,13 @@ class _EventAddScreenState extends State<EventAddScreen> {
   void initState() {
     super.initState();
 
-    _eventBloc.outState.listen((state) {
+    _eventAddBloc.outState.listen((state) {
       switch (state) {
-        case EventState.SUCCESS:
+        case EventAddState.SUCCESS:
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => const EventsSettingsScreen()));
           break;
-        case EventState.FAIL:
+        case EventAddState.FAIL:
           showDialog(
               context: context,
               builder: (context) => const AlertDialog(
@@ -58,8 +58,8 @@ class _EventAddScreenState extends State<EventAddScreen> {
                     content: Text("Erro ao adicionar evento"),
                   ));
           break;
-        case EventState.LOADING:
-        case EventState.IDLE:
+        case EventAddState.LOADING:
+        case EventAddState.IDLE:
       }
     });
   }
@@ -108,7 +108,7 @@ class _EventAddScreenState extends State<EventAddScreen> {
 
   @override
   void dispose() {
-    _eventBloc.dispose();
+    _eventAddBloc.dispose();
     super.dispose();
   }
 
@@ -122,22 +122,22 @@ class _EventAddScreenState extends State<EventAddScreen> {
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(50), topRight: Radius.circular(50)),
         child: SingleChildScrollView(
-          child: StreamBuilder<EventState>(
-              stream: _eventBloc.outState,
-              initialData: EventState.LOADING,
+          child: StreamBuilder<EventAddState>(
+              stream: _eventAddBloc.outState,
+              initialData: EventAddState.LOADING,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   switch (snapshot.data) {
-                    case EventState.LOADING:
+                    case EventAddState.LOADING:
                       return const Center(
                         child: CircularProgressIndicator(
                           valueColor:
                               AlwaysStoppedAnimation(Colors.amberAccent),
                         ),
                       );
-                    case EventState.FAIL:
-                    case EventState.SUCCESS:
-                    case EventState.IDLE:
+                    case EventAddState.FAIL:
+                    case EventAddState.SUCCESS:
+                    case EventAddState.IDLE:
                       return Container(
                         padding: const EdgeInsets.only(
                             left: 8.0, right: 8.0, top: 16, bottom: 32),
@@ -250,8 +250,8 @@ class _EventAddScreenState extends State<EventAddScreen> {
                                 icon: Icons.festival,
                                 hint: "Nome",
                                 obscure: false,
-                                stream: _eventBloc.outName,
-                                onChanged: _eventBloc.changeName,
+                                stream: _eventAddBloc.outName,
+                                onChanged: _eventAddBloc.changeName,
                                 minLines: 1,
                                 maxLines: 1),
                             const SizedBox(
@@ -262,8 +262,8 @@ class _EventAddScreenState extends State<EventAddScreen> {
                                 icon: Icons.location_on_outlined,
                                 hint: "Endereço",
                                 obscure: false,
-                                stream: _eventBloc.outAddress,
-                                onChanged: _eventBloc.changeAddress,
+                                stream: _eventAddBloc.outAddress,
+                                onChanged: _eventAddBloc.changeAddress,
                                 minLines: 1,
                                 maxLines: 1),
                             const SizedBox(
@@ -393,8 +393,8 @@ class _EventAddScreenState extends State<EventAddScreen> {
                               icon: Icons.info_outline,
                               hint: "Descrição",
                               obscure: false,
-                              stream: _eventBloc.outInfos,
-                              onChanged: _eventBloc.changeInfos,
+                              stream: _eventAddBloc.outInfos,
+                              onChanged: _eventAddBloc.changeInfos,
                               minLines: 4,
                               maxLines: 8,
                             ),
@@ -402,7 +402,7 @@ class _EventAddScreenState extends State<EventAddScreen> {
                               height: 12,
                             ),
                             StreamBuilder<bool>(
-                              stream: _eventBloc.outSubmitValidEvent,
+                              stream: _eventAddBloc.outSubmitValidEvent,
                               builder: (context, snapshot) {
                                 return ElevatedButton(
 
@@ -453,7 +453,7 @@ class _EventAddScreenState extends State<EventAddScreen> {
     if (file != null &&
         _dateTimeStartPicked == true &&
         _dateTimeEndPicked == true) {
-      ReportMessage reportMessage = await _eventBloc.uploadEvent(
+      ReportMessage reportMessage = await _eventAddBloc.uploadEvent(
           file!, _dateTimeStart, _dateTimeEnd) ;
       showDialog(
         context: context,

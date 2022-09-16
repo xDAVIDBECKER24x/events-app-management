@@ -4,6 +4,7 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:events_app_management/blocs/application_bloc.dart';
 import 'package:events_app_management/constants.dart';
 import 'package:events_app_management/models/account_message.dart';
+import 'package:events_app_management/modules/events/screens/event_add_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,15 +13,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../../../core/auth/signup_validators.dart';
 import '../../../services/storage_service.dart';
 
-enum EventState { IDLE, LOADING, SUCCESS, FAIL }
+enum EventAddState { IDLE, LOADING, SUCCESS, FAIL }
 
-class EventBloc extends BlocBase with SignupValidators {
-  final _stateController = BehaviorSubject<EventState>();
+class EventAddBloc extends BlocBase with SignupValidators {
+  final _stateController = BehaviorSubject<EventAddState>();
   ApplicationBloc aplicationBloc = ApplicationBloc();
   StorageService storageService = StorageService();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Stream<EventState> get outState => _stateController.stream;
+  Stream<EventAddState> get outState => _stateController.stream;
 
 
   final _nameController = BehaviorSubject<String>();
@@ -55,8 +56,8 @@ class EventBloc extends BlocBase with SignupValidators {
             return true;
           });
 
-  EventBloc() {
-    _stateController.add(EventState.IDLE);
+  EventAddBloc() {
+    _stateController.add(EventAddState.IDLE);
   }
 
   Future<String?> uploadFile(File file) async {
@@ -70,7 +71,7 @@ class EventBloc extends BlocBase with SignupValidators {
 
   Future<ReportMessage> uploadEvent(File file, DateTime dateTimeStart,DateTime dateTimeEnd) async {
 
-    _stateController.add(EventState.LOADING);
+    _stateController.add(EventAddState.LOADING);
     final name = _nameController.value;
     final address = _addressController.value;
     final dateStart = dateTimeStart;
@@ -83,7 +84,7 @@ class EventBloc extends BlocBase with SignupValidators {
     }
     String? donwloadUrl = await uploadFile(file);
     if(donwloadUrl == null){
-      _stateController.add(EventState.IDLE);
+      _stateController.add(EventAddState.IDLE);
       return ReportMessage(code: 1, message: 'Erro no upload do banner');
     }
     try {
@@ -106,14 +107,14 @@ class EventBloc extends BlocBase with SignupValidators {
         'isActive' : true,
         'idUser' : currentUID
       }).then((value) {
-        _stateController.add(EventState.SUCCESS);
+        _stateController.add(EventAddState.SUCCESS);
         return ReportMessage(code: 0, message: 'Evento criado');
       } ).catchError((e) => print(e));
-      _stateController.add(EventState.IDLE);
+      _stateController.add(EventAddState.IDLE);
       return ReportMessage(code: 2, message: 'Erro no cadastro do evento');
     } on FirebaseException catch (e) {
       print(e);
-      _stateController.add(EventState.IDLE);
+      _stateController.add(EventAddState.IDLE);
       return ReportMessage(code: 2, message: 'Erro no cadastro do evento');
     }
   }

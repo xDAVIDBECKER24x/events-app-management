@@ -1,14 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:events_app_management/modules/codes/screens/code_add_screen.dart';
-import 'package:events_app_management/modules/codes/screens/code_scan_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-
 import '../../../constants.dart';
 import '../../../widgets/button_add.dart';
-import '../../../widgets/codes_list.dart';
+import '../widgets/code_card_widget.dart';
 
 
 class CodesSettingsScreen extends StatefulWidget {
@@ -23,7 +18,6 @@ class _CodesSettingsScreenState extends State<CodesSettingsScreen> {
   final String data = "https://www.google.com/";
 
   Future _loadCodes() async {
-
     final ref = await FirebaseFirestore.instance
         .collection("codes")
         .where("idUser", isEqualTo: currentUID).get();
@@ -34,12 +28,12 @@ class _CodesSettingsScreenState extends State<CodesSettingsScreen> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body : NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+      body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) =>
+          [
             SliverAppBar(
                 pinned: true,
                 snap: false,
@@ -64,68 +58,40 @@ class _CodesSettingsScreenState extends State<CodesSettingsScreen> {
                 ),
                 actions: [])
           ],
-          body: FutureBuilder(
-            future: _loadCodes(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return CodesList(snapshot: snapshot);
-              }
-              return Container(
-                margin: EdgeInsets.only(bottom: 46),
-                padding: EdgeInsets.all(12),
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: CustomScrollView(slivers: [
-                  SliverToBoxAdapter(
-                      child: ButtonAdd(widget: CodeAddScreen(),)
-                  ),
-                  SliverToBoxAdapter(
+          body: CustomScrollView(slivers: [
+            SliverToBoxAdapter(
+                child: ButtonAdd(
+                  widget: CodeAddScreen(),
+                )),
+            FutureBuilder(
+                future: _loadCodes(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    final codes = snapshot.data as List;
+                    return SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          childCount: codes.length,
+                              (BuildContext context, int index) {
+                            final Map<String, dynamic> code = codes[index];
+                            return Container(
+                                padding: EdgeInsets.all(8),
+                                child: CodeCard(code: code)
+                            );
+                          },
+                        ));
+                  }
+                  return SliverToBoxAdapter(
                       child: Container(
-                        height: MediaQuery.of(context).size.height - 300,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height - 300,
                         child: Center(
                           child: CircularProgressIndicator(),
                         ),
-                      ))
-                ]),
-              );
-            },
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => QrcodeScanScreen()),
-            );
-
-          },
-          backgroundColor: Colors.amber,
-          child: const Icon(
-            Icons.qr_code,
-            size: 36,
-          ),
-        ),
+                      ));
+                })
+          ])),
     );
   }
-
-  // _buildCodesView() {
-  //   return Center(
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children: [
-  //         SizedBox(height: 32,),
-  //         Text('Example QR CODE'),
-  //         Container(
-  //           height: 300,
-  //           width: 300,
-  //           child: QrImage(
-  //             data: data,
-  //             gapless: true,
-  //             errorCorrectionLevel: QrErrorCorrectLevel.H,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }
