@@ -56,7 +56,8 @@ class _CodesSettingsScreenState extends State<CodesSettingsScreen> {
                       fontSize: 26,
                       color: Colors.black),
                 ),
-                actions: [])
+
+              )
           ],
           body: CustomScrollView(slivers: [
             SliverToBoxAdapter(

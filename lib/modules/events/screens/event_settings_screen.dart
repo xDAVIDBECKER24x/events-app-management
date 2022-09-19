@@ -3,6 +3,8 @@ import 'package:events_app_management/modules/events/bloc/event_settings_bloc.da
 import 'package:events_app_management/modules/events/widgets/event_card_widget.dart';
 import 'package:events_app_management/widgets/button_add.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../../constants.dart';
 import '../../../utils/date_utils.dart';
@@ -141,7 +143,9 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
                                                       Row(
                                                         children: [
                                                           IconButton(
-                                                              onPressed: () {},
+                                                              onPressed: () async {
+
+                                                              },
                                                               icon: Icon(
                                                                   Icons.share)),
                                                           IconButton(
@@ -242,8 +246,21 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
     );
   }
 
-  _deleteEvent(Map<String, dynamic> event) {
-    print(event);
-  _eventSettingsBloc.deleteEvent(event);
+  _shareEvent(Map<String, dynamic> event) async{
+    print('Share');
+    await Share.share(event['data']['downloadUrl'], subject: 'Look what I made!');
+  }
+
+  _deleteEvent(Map<String, dynamic> event) async {
+    await showDialog(
+        context: context,
+        builder: (context) => ConfirmDialogBox(
+      infoText: 'Tem certeza que deseja excluir ${event['data']['name']}', title: 'Excluir evento?',
+    ),
+    ).then((valueFromDialog){
+      if(valueFromDialog==true){
+        _eventSettingsBloc.deleteEvent(event);
+      }
+      });
   }
 }

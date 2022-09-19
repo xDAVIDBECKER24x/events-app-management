@@ -71,7 +71,6 @@ class CodeAddBloc extends BlocBase with EventValidators{
     _stateController.add(CodeAddState.LOADING);
 
 
-
     final name = _nameController.value;
     final info = _infoController.value;
 
@@ -93,7 +92,7 @@ class CodeAddBloc extends BlocBase with EventValidators{
           'idUser' :currentUID,
           'name': name,
           'info': info,
-          'downloadUrl': fileUploadInfo!['downloadUrl'],
+          'downloadUrl': fileUploadInfo['downloadUrl'],
           'codeBannerName' : fileUploadInfo['name'],
         }).then((value) {
           _stateController.add(CodeAddState.SUCCESS);
