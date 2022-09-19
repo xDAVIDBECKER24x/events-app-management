@@ -40,5 +40,6 @@ class SettingsBloc extends BlocBase with SignupValidators{
 
   @override
   void dispose() {
+    _stateController.close();
   }
 }

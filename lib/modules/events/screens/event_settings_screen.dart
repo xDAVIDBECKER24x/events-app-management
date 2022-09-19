@@ -64,14 +64,6 @@ class _EventsSettingsScreenState extends State<EventsSettingsScreen> {
                     centerTitle: true,
                     elevation: 0,
                     backgroundColor: Colors.white,
-                    leading: IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.grey,
-                        size: 30,
-                      ),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
                     title: Text(
                       "Eventos",
                       style: TextStyle(

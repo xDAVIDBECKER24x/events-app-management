@@ -2,18 +2,21 @@ import 'package:events_app_management/modules/codes/screens/code_scan_screen.dar
 import 'package:events_app_management/modules/codes/screens/code_settings_screen.dart';
 import 'package:events_app_management/modules/events/screens/event_settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../modules/settings/screens/settings_screen.dart';
 
 
 
 class NavigationBarScreen extends StatefulWidget {
+  const NavigationBarScreen({Key? key}) : super(key: key);
+
   @override
   _NavigationBarScreenState createState() => _NavigationBarScreenState();
 }
 
 class _NavigationBarScreenState extends State<NavigationBarScreen> {
-  int _index = 0;
+  int _index = 1;
 
   final List<AppBar> _appbars = [
     AppBar(),
@@ -22,7 +25,7 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
   ];
 
 
-  final List<Widget> _screens = [
+  final List<Widget> _screens = const [
     CodesSettingsScreen(),
     EventsSettingsScreen(),
     SettingsScreen(),
@@ -36,13 +39,13 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: onTabTapped,
-        items: [
+        items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
+              icon: Icon(Icons.qr_code_scanner),
             label: ''
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_basket),
+              icon: Icon(Icons.airplane_ticket),
               label: ''
           ),
           BottomNavigationBarItem(
@@ -52,14 +55,14 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
         ],
       ),
       floatingActionButton: _index == 0 ? FloatingActionButton(
-          child: const Icon(Icons.qr_code,size: 34,),
           backgroundColor: Colors.amber,
           onPressed: (){
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const QrcodeScanScreen()),
             );
-        }
+        },
+          child:  const Icon(Icons.qr_code,size: 34,)
       ) : null
     );
   }
@@ -69,51 +72,4 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
       _index = index;
     });
   }
-}
-
-AppBar _buildAppBar(context){
-  return AppBar(
-    elevation: 0,
-    backgroundColor: Colors.white,
-    title: Row(
-      children: [
-        Container(
-          height: 45 ,
-          width: 45,
-          child :ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset('assets/images/teste_image.png',fit: BoxFit.fill,),
-          ),
-        ),
-        SizedBox(width: 10,),
-        Flexible(
-          child: RichText(
-            overflow: TextOverflow.ellipsis,
-            text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Bem vindo de Volta!",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  TextSpan(
-                    text: "Burguinhosss sssss",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ]
-            ),
-          ),
-        ),
-      ],
-    ) ,
-    actions: [
-    ],
-  );
 }

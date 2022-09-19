@@ -130,6 +130,7 @@ class CodeAddBloc extends BlocBase with EventValidators{
   void dispose() {
     _nameController.close();
     _infoController.close();
+    _stateController.close();
     _streamSubscription.cancel();
   }
 

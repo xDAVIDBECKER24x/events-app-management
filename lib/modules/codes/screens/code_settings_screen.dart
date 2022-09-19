@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:events_app_management/modules/codes/screens/code_add_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../constants.dart';
 import '../../../widgets/button_add.dart';
@@ -41,14 +42,6 @@ class _CodesSettingsScreenState extends State<CodesSettingsScreen> {
                 centerTitle: true,
                 elevation: 0,
                 backgroundColor: Colors.white,
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.grey,
-                    size: 30,
-                  ),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
                 title: Text(
                   "Cupons",
                   style: TextStyle(

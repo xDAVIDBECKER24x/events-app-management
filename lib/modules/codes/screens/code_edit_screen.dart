@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:events_app_management/modules/codes/screens/code_settings_screen.dart';
+import 'package:events_app_management/modules/codes/widgets/event_code_card_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -15,12 +16,10 @@ class CodeEditScreen extends StatefulWidget {
   State<CodeEditScreen> createState() => _CodeEditScreenState();
 }
 
-
 class _CodeEditScreenState extends State<CodeEditScreen> {
-
   final _codeEditBloc = CodeEditBloc();
   User? currentUser = FirebaseAuth.instance.currentUser;
-  var eventData;
+  var event;
 
   @override
   void initState() {
@@ -36,9 +35,9 @@ class _CodeEditScreenState extends State<CodeEditScreen> {
           showDialog(
               context: context,
               builder: (context) => const AlertDialog(
-                title: Text("Erro"),
-                content: Text("Erro ao atualizar código"),
-              ));
+                    title: Text("Erro"),
+                    content: Text("Erro ao atualizar código"),
+                  ));
           break;
         case CodeEditState.LOADING:
         case CodeEditState.IDLE:
@@ -46,25 +45,29 @@ class _CodeEditScreenState extends State<CodeEditScreen> {
     });
   }
 
-  Future getEventByCodeId(String codeId) async {
-    print(codeId);
-
+  Future getEventById(String codeId) async {
     try {
-      eventData = await FirebaseFirestore.instance
-          .collection('users').doc(currentUser?.uid).collection('events').doc(codeId)
+      event = await FirebaseFirestore.instance
+          .collection('events')
+          .doc(codeId)
           .get();
-      return eventData;
+      return event;
     } on FirebaseException catch (error) {
       print(error.message);
     }
-
   }
 
+  Future getEventById2(String codeId) async {
+    try {
+      final event = await FirebaseFirestore.instance
+          .collection('events')
+          .doc(codeId)
+          .get();
 
-  @override
-  void dispose() {
-    _codeEditBloc.dispose();
-    super.dispose();
+      return {'id' : event.id, 'data' : event};
+    } on FirebaseException catch (error) {
+      print(error.message);
+    }
   }
 
 
@@ -79,35 +82,13 @@ class _CodeEditScreenState extends State<CodeEditScreen> {
               case CodeEditState.LOADING:
                 return const Center(
                   child: CircularProgressIndicator(
-                    valueColor:
-                    AlwaysStoppedAnimation(Colors.amberAccent),
+                    valueColor: AlwaysStoppedAnimation(Colors.amberAccent),
                   ),
                 );
               case CodeEditState.FAIL:
               case CodeEditState.SUCCESS:
               case CodeEditState.IDLE:
-
-                print(widget.code);
-                if(!widget.code.containsKey('idEvent')){
-                  return _buildWidgetCode();
-                }
-                else{
-                  print("ID EVENT : ${widget.code['idEvent']}");
-                  return  FutureBuilder(
-                    future : getEventByCodeId(widget.code['idEvent']),
-                    builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                      final event = snapshot.data;
-                      if(!snapshot.hasData){
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(Colors.amberAccent),
-                          ),
-                        );
-                      }
-                      return _buildWidgetCodeEvent(event);
-                    },
-                  );
-                }
+                return _buildWidgetCode(context, widget.code);
             }
           }
           return const Center(
@@ -118,115 +99,62 @@ class _CodeEditScreenState extends State<CodeEditScreen> {
         });
   }
 
-  Widget _buildWidgetCode(){
+  _buildWidgetCode(BuildContext context, Map<String, dynamic> code) {
+    print('-----------------------------------');
+    print(code.containsKey('idEvent'));
+
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         height: MediaQuery.of(context).size.height - 15,
         child: Column(
           children: [
-            Container(padding: const EdgeInsets.all(8.0),child: Text(widget.code['name'])),
+            Container(
+                padding: const EdgeInsets.all(8.0), child: Text(code['name'])),
             Divider(),
             Container(
               height: 200,
               padding: const EdgeInsets.all(8.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(widget.code['downloadUrl']),
+                child: Image.network(code['downloadUrl']),
               ),
             ),
-            Container(padding: const EdgeInsets.all(8.0),child: Text(widget.code['info'])),
+            Container(
+                padding: const EdgeInsets.all(8.0), child: Text(code['info'])),
+            Container(
+                child: !code.containsKey('idEvent')
+                    ? Text('Nenhum evento vinculado')
+                    : FutureBuilder(
+                        future:getEventById(code['idEvent']),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          print(snapshot.data);
+                          if (snapshot.hasError) {
+                            return Text("Erro ao carregar evento");
+                          }
+                          if (snapshot.hasData && !snapshot.data!.exists) {
+                            return Text("Evento finalizado/inexistente");
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            Map<String, dynamic> event =
+                                snapshot.data!.data() as Map<String, dynamic>;
+                            return _buildWidgetCodeEvent(event);
+                          }
+                          return Container(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                color: Colors.amber,
+                              ));
+                        }))
           ],
         ));
   }
 
-  Widget _buildWidgetCodeEvent(event) {
-    return Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        height: MediaQuery.of(context).size.height - 15,
-        child: Column(
-          children: [
-            Container(padding: const EdgeInsets.all(8.0),child: Text(widget.code['name'])),
-            Divider(),
-            Container(
-              height: 200,
-              padding: const EdgeInsets.all(8.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.network(widget.code['downloadUrl']),
-              ),
-            ),
-            Container(padding: const EdgeInsets.all(8.0),child: Text(widget.code['info'])),
-            Container(
-              padding: EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    height: 150,
-                    child: Image.network(
-                      event['downloadUrl'],
-                     ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          event['name'],
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 8,),
-                        Row(
-                          children: [
-                            Icon(Icons.event_available),
-                            Text(
-                              timestampToDateFormatted(event['dateStart']),
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 4,),
-                        Row(
-                          children: [
-                            Icon(Icons.timer),
-                            Text(
-                              timestampToTimeFormatted(event['dateStart']),
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 4,),
-                        Row(
-                          children: [
-                            Icon(Icons.pin_drop_rounded),
-                            Text(
-                              event['address'],
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                  )
-                ],
-              ),
-            ),
-          ],
-        ));
+  Widget _buildWidgetCodeEvent(Map<String, dynamic> event) {
+    return EventCodeCard(event: event);
   }
-
 }
+
+
